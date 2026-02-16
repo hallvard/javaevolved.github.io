@@ -191,7 +191,6 @@
       let touchStartY = 0;
       let touchEndX = 0;
       let touchEndY = 0;
-      let isSwiping = false;
 
       // Track touch start
       card.addEventListener('touchstart', (e) => {
@@ -200,13 +199,6 @@
         
         touchStartX = e.changedTouches[0].clientX;
         touchStartY = e.changedTouches[0].clientY;
-        isSwiping = false;
-      }, { passive: true });
-
-      // Track touch move to detect swipe
-      card.addEventListener('touchmove', (e) => {
-        if (!e.target.closest('.card-code')) return;
-        isSwiping = true;
       }, { passive: true });
 
       // Handle touch end for swipe or tap
@@ -234,8 +226,8 @@
             // Swipe right - show old
             card.classList.remove('toggled');
           }
-        } else if (!isSwiping) {
-          // It's a tap (no significant movement)
+        } else if (absDeltaX < 10 && absDeltaY < 10) {
+          // It's a tap (movement under 10px threshold)
           card.classList.toggle('toggled');
         }
       }, { passive: true });
