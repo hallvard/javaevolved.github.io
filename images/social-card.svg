@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b0b0f"/>
+      <stop offset="100%" style="stop-color:#18181b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#fb923c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+  <!-- Logo -->
+  <text x="80" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="32" fill="#a1a1aa">java.<tspan fill="#fb923c" font-weight="700">evolved</tspan></text>
+  <!-- Main title -->
+  <text x="80" y="260" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="800" fill="#fafafa">Java has evolved.</text>
+  <text x="80" y="345" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="800" fill="url(#accent)">Have you?</text>
+  <!-- Subtitle -->
+  <text x="80" y="420" font-family="system-ui,-apple-system,sans-serif" font-size="28" fill="#a1a1aa">Every old Java pattern next to its modern replacement — side by side.</text>
+  <!-- Code snippet preview -->
+  <rect x="80" y="470" width="480" height="110" rx="12" fill="#1e1e22" stroke="#27272a" stroke-width="1"/>
+  <text x="100" y="502" font-family="monospace" font-size="16" fill="#ef4444">✕ Old</text>
+  <text x="100" y="530" font-family="monospace" font-size="18" fill="#71717a">public class Point {</text>
+  <text x="100" y="556" font-family="monospace" font-size="18" fill="#71717a">  private final int x, y; ...</text>
+  <rect x="600" y="470" width="480" height="110" rx="12" fill="#1a2e1a" stroke="#27272a" stroke-width="1"/>
+  <text x="620" y="502" font-family="monospace" font-size="16" fill="#22c55e">✓ Modern</text>
+  <text x="620" y="538" font-family="monospace" font-size="20" fill="#4ade80">record Point(int x, int y) {}</text>
+  <!-- Badge -->
+  <text x="1120" y="110" font-family="system-ui,-apple-system,sans-serif" font-size="22" fill="#71717a" text-anchor="end">85 patterns · Java 8 → 25</text>
+</svg>
