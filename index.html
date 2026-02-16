@@ -60,7 +60,7 @@
     "description": "A collection of modern Java code snippets. Every old Java pattern next to its clean, modern replacement — side by side.",
     "mainEntity": {
       "@type": "ItemList",
-      "numberOfItems": 85,
+      "numberOfItems": 86,
       "itemListElement": [
                 {"@type": "ListItem", "position": 1, "url": "https:\/\/javaevolved.github.io\/type-inference-with-var", "name": "Type inference with var"}
                 ,{"@type": "ListItem", "position": 2, "url": "https:\/\/javaevolved.github.io\/text-blocks-for-multiline-strings", "name": "Text blocks for multiline strings"}
@@ -147,6 +147,7 @@
                 ,{"@type": "ListItem", "position": 34, "url": "https:\/\/javaevolved.github.io\/jfr-profiling", "name": "JFR for profiling"}
                 ,{"@type": "ListItem", "position": 34, "url": "https:\/\/javaevolved.github.io\/compact-object-headers", "name": "Compact object headers"}
                 ,{"@type": "ListItem", "position": 34, "url": "https:\/\/javaevolved.github.io\/aot-class-preloading", "name": "AOT class preloading"}
+                ,{"@type": "ListItem", "position": 35, "url": "https:\/\/javaevolved.github.io\/default-interface-methods", "name": "Default interface methods"}
               ]
     }
   }
@@ -163,7 +164,7 @@
   </nav>
 
   <section class="hero">
-    <div class="hero-badge">✦ 85 modern patterns · Java 8 → Java 25</div>
+    <div class="hero-badge">✦ 86 modern patterns · Java 8 → Java 25</div>
     <h1>Java has evolved.<br><span class="gradient">Your code can too.</span></h1>
     <p>Every old Java pattern next to its clean, modern replacement — side by side.</p>
     <a href="/records-for-data-classes.html" class="hero-compare">
@@ -209,7 +210,7 @@
   <section class="section" id="all-comparisons" style="padding-top:24px">
     <div class="section-header">
       <h2 class="section-title">All comparisons</h2>
-      <span class="section-badge">85 snippets</span>
+      <span class="section-badge">86 snippets</span>
     </div>
     <div class="filter-pills" id="categoryFilter">
       <span class="filter-label">Filter:</span>
@@ -2936,12 +2937,56 @@ $ java -XX:AOTMode=on \
           <span class="arrow-link">→</span>
         </div>
       </a>
+      <a href="/default-interface-methods.html" class="tip-card" data-category="language">
+        <div class="tip-card-body">
+          <div class="tip-card-header">
+            <div class="tip-badges"><span class="badge language">Language</span></div>
+          </div>
+          <h3>Default interface methods</h3>
+        </div>
+        <div class="card-code">
+          <div class="card-code-layer old-layer">
+            <span class="mini-label">Old</span>
+            <span class="code-text">// Need abstract class to share behavior
+public abstract class AbstractLogger {
+    public void log(String msg) {
+        System.out.println(
+            timestamp() + &quot;: &quot; + msg);
+    }
+    abstract String timestamp();
+}
+
+// Single inheritance only
+public class FileLogger
+    extends AbstractLogger { ... }</span>
+          </div>
+          <div class="card-code-layer modern-layer">
+            <span class="mini-label">Modern</span>
+            <span class="code-text">public interface Logger {
+    default void log(String msg) {
+        System.out.println(
+            timestamp() + &quot;: &quot; + msg);
+    }
+    String timestamp();
+}
+
+// Multiple interfaces allowed
+public class FileLogger
+    implements Logger, Closeable { ... }</span>
+          </div>
+          <span class="hover-hint">hover to see modern →</span>
+        </div>
+        <div class="tip-card-footer">
+          <span class="browser-support"><span class="dot"></span> JDK 8+</span>
+          <span class="arrow-link">→</span>
+        </div>
+      </a>
     </div>
   </section>
 
   <div class="stats-bar">
     <div class="stat-card">
-      <div class="number orange">85</div>
+      <div class="number orange">86</div>
       <div class="label">Modern Patterns</div>
     </div>
     <div class="stat-card">
