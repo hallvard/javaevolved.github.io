@@ -198,8 +198,8 @@
         // Only track touches on the card-code area
         if (!e.target.closest('.card-code')) return;
         
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
         isSwiping = false;
       }, { passive: true });
 
@@ -214,8 +214,8 @@
         // Only handle touches on the card-code area
         if (!e.target.closest('.card-code')) return;
 
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndY = e.changedTouches[0].screenY;
+        touchEndX = e.changedTouches[0].clientX;
+        touchEndY = e.changedTouches[0].clientY;
 
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
@@ -245,6 +245,7 @@
       card.addEventListener('click', (e) => {
         if (e.target.closest('.card-code')) {
           e.preventDefault();
+          e.stopPropagation();
         }
       });
     });
