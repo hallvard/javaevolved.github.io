@@ -235,6 +235,16 @@ def main():
 
     print(f"Rebuilt data/snippets.json with {len(snippets_list)} entries")
 
+    # Patch index.html with the current snippet count
+    count = len(all_snippets)
+    with open("index.html") as f:
+        index_content = f.read()
+    index_content = index_content.replace("{{snippetCount}}", str(count))
+    with open("index.html", "w") as f:
+        f.write(index_content)
+
+    print(f"Patched index.html with snippet count: {count}")
+
 
 if __name__ == "__main__":
     main()
