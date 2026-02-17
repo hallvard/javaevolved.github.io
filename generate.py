@@ -10,6 +10,9 @@ from urllib.parse import quote
 
 BASE_URL = "https://javaevolved.github.io"
 TEMPLATE_FILE = "templates/slug-template.html"
+WHY_CARD_TEMPLATE = "templates/why-card.html"
+RELATED_CARD_TEMPLATE = "templates/related-card.html"
+SOCIAL_SHARE_TEMPLATE = "templates/social-share.html"
 CONTENT_DIR = "content"
 SITE_DIR = "site"
 
@@ -30,6 +33,14 @@ CATEGORY_DISPLAY = {
 def escape(text):
     """HTML-escape text for use in attributes and content."""
     return html.escape(text, quote=True)
+
+
+def replace_tokens(template, replacements):
+    """Replace {{token}} placeholders in a template string."""
+    def replacer(m):
+        key = m.group(1)
+        return replacements.get(key, m.group(0))
+    return re.sub(r"\{\{(\w+)\}\}", replacer, template)
 
 
 def json_escape(text):
@@ -84,65 +95,49 @@ def render_nav_arrows(data):
     return "\n          ".join(parts)
 
 
-def render_why_cards(why_list):
+def render_why_cards(why_card_template, why_list):
     """Render the 3 why-modern-wins cards."""
     cards = []
     for w in why_list:
         cards.append(
-            f"""        <div class="why-card">
-          <div class="why-icon">{w['icon']}</div>
-          <h3>{escape(w['title'])}</h3>
-          <p>{escape(w['desc'])}</p>
-        </div>"""
+            replace_tokens(why_card_template, {
+                "icon": w["icon"],
+                "title": escape(w["title"]),
+                "desc": escape(w["desc"]),
+            })
         )
     return "\n".join(cards)
 
 
-def render_related_card(related_data):
+def render_related_card(related_card_template, related_data):
     """Render a single related pattern tip-card."""
     cat = related_data["category"]
-    slug = related_data["slug"]
     cat_display = CATEGORY_DISPLAY[cat]
-    path = f"{cat}/{slug}"
 
-    return f"""        <a href="/{path}.html" class="tip-card">
-          <div class="tip-card-body">
-            <div class="tip-card-header">
-              <div class="tip-badges">
-                <span class="badge {cat}">{cat_display}</span>
-                <span class="badge {related_data['difficulty']}">{related_data['difficulty']}</span>
-              </div>
-            </div>
-            <h3>{escape(related_data['title'])}</h3>
-          </div>
-          <div class="card-code">
-            <div class="card-code-layer old-layer">
-              <div class="mini-label">{escape(related_data['oldLabel'])}</div>
-              <pre class="code-text">{escape(related_data['oldCode'])}</pre>
-            </div>
-            <div class="card-code-layer modern-layer">
-              <div class="mini-label">{escape(related_data['modernLabel'])}</div>
-              <pre class="code-text">{escape(related_data['modernCode'])}</pre>
-            </div>
-            <span class="hover-hint">Hover to see modern ➜</span>
-          </div>
-          <div class="tip-card-footer">
-            <span class="browser-support"><span class="dot"></span>JDK {related_data['jdkVersion']}+</span>
-            <span class="arrow-link">→</span>
-          </div>
-        </a>"""
+    return replace_tokens(related_card_template, {
+        "category": cat,
+        "slug": related_data["slug"],
+        "catDisplay": cat_display,
+        "difficulty": related_data["difficulty"],
+        "title": escape(related_data["title"]),
+        "oldLabel": escape(related_data["oldLabel"]),
+        "oldCode": escape(related_data["oldCode"]),
+        "modernLabel": escape(related_data["modernLabel"]),
+        "modernCode": escape(related_data["modernCode"]),
+        "jdkVersion": related_data["jdkVersion"],
+    })
 
 
-def render_related_section(related_paths, all_snippets):
+def render_related_section(related_card_template, related_paths, all_snippets):
     """Render all related pattern cards."""
     cards = []
     for path in related_paths:
         if path in all_snippets:
-            cards.append(render_related_card(all_snippets[path]))
+            cards.append(render_related_card(related_card_template, all_snippets[path]))
     return "\n".join(cards)
 
 
-def render_social_share(slug, title):
+def render_social_share(social_share_template, slug, title):
     """Render social share URLs using the old flat URL format."""
     page_url = f"{BASE_URL}/{slug}.html"
     share_text = f"{title} \u2013 java.evolved"
@@ -150,23 +145,14 @@ def render_social_share(slug, title):
     encoded_url = quote(page_url, safe="")
     encoded_text = quote(share_text, safe="")
 
-    x_url = f"https://x.com/intent/tweet?url={encoded_url}&text={encoded_text}"
-    bsky_url = f"https://bsky.app/intent/compose?text={encoded_text}%20{encoded_url}"
-    li_url = f"https://www.linkedin.com/sharing/share-offsite/?url={encoded_url}"
-    reddit_url = (
-        f"https://www.reddit.com/submit?url={encoded_url}&title={encoded_text}"
-    )
-
-    return f"""  <div class="social-share">
-    <span class="share-label">Share</span>
-    <a href="{x_url}" target="_blank" rel="noopener" class="share-btn share-x" aria-label="Share on X">𝕏</a>
-    <a href="{bsky_url}" target="_blank" rel="noopener" class="share-btn share-bsky" aria-label="Share on Bluesky">🦋</a>
-    <a href="{li_url}" target="_blank" rel="noopener" class="share-btn share-li" aria-label="Share on LinkedIn">in</a>
-    <a href="{reddit_url}" target="_blank" rel="noopener" class="share-btn share-reddit" aria-label="Share on Reddit">⬡</a>
-  </div>"""
+    return replace_tokens(social_share_template, {
+        "encodedUrl": encoded_url,
+        "encodedText": encoded_text,
+    })
 
 
-def generate_html(template, data, all_snippets):
+def generate_html(template, why_card_template, related_card_template,
+                  social_share_template, data, all_snippets):
     """Generate the full HTML page for a snippet by rendering the template."""
     cat = data["category"]
     slug = data["slug"]
@@ -195,28 +181,27 @@ def generate_html(template, data, all_snippets):
         "summaryJson": json_escape(data["summary"]),
         "categoryDisplayJson": json_escape(cat_display),
         "navArrows": render_nav_arrows(data),
-        "whyCards": render_why_cards(data["whyModernWins"]),
-        "relatedCards": render_related_section(data.get("related", []), all_snippets),
-        "socialShare": render_social_share(slug, data["title"]),
+        "whyCards": render_why_cards(why_card_template, data["whyModernWins"]),
+        "relatedCards": render_related_section(related_card_template, data.get("related", []), all_snippets),
+        "socialShare": render_social_share(social_share_template, slug, data["title"]),
     }
 
-    # Replace all {{placeholder}} tokens
-    def replace_token(match):
-        key = match.group(1)
-        if key in replacements:
-            return str(replacements[key])
-        return match.group(0)
-
-    return re.sub(r"\{\{(\w+)\}\}", replace_token, template)
+    return replace_tokens(template, replacements)
 
 
 def main():
     template = load_template()
+    why_card_template = open(WHY_CARD_TEMPLATE).read()
+    related_card_template = open(RELATED_CARD_TEMPLATE).read()
+    social_share_template = open(SOCIAL_SHARE_TEMPLATE).read()
     all_snippets = load_all_snippets()
     print(f"Loaded {len(all_snippets)} snippets")
 
     for key, data in all_snippets.items():
-        html_content = generate_html(template, data, all_snippets).strip()
+        html_content = generate_html(
+            template, why_card_template, related_card_template,
+            social_share_template, data, all_snippets
+        ).strip()
         out_dir = os.path.join(SITE_DIR, data['category'])
         os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, f"{data['slug']}.html")

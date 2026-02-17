@@ -28,6 +28,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 static final String BASE_URL = "https://javaevolved.github.io";
 static final String TEMPLATE_FILE = "templates/slug-template.html";
+static final String WHY_CARD_TEMPLATE = "templates/why-card.html";
+static final String RELATED_CARD_TEMPLATE = "templates/related-card.html";
+static final String SOCIAL_SHARE_TEMPLATE = "templates/social-share.html";
 static final String CONTENT_DIR = "content";
 static final String SITE_DIR = "site";
 static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{(\\w+)}}");
@@ -105,12 +108,16 @@ sealed interface NavArrow {
 
 void main() throws IOException {
     var template = Files.readString(Path.of(TEMPLATE_FILE));
+    var whyCardTemplate = Files.readString(Path.of(WHY_CARD_TEMPLATE));
+    var relatedCardTemplate = Files.readString(Path.of(RELATED_CARD_TEMPLATE));
+    var socialShareTemplate = Files.readString(Path.of(SOCIAL_SHARE_TEMPLATE));
     var allSnippets = loadAllSnippets();
     IO.println("Loaded %d snippets".formatted(allSnippets.size()));
 
     // Generate HTML files
     for (var snippet : allSnippets.values()) {
-        var html = generateHtml(template, snippet, allSnippets).strip();
+        var html = generateHtml(template, whyCardTemplate, relatedCardTemplate, socialShareTemplate,
+                snippet, allSnippets).strip();
         Files.createDirectories(Path.of(SITE_DIR, snippet.category()));
         Files.writeString(Path.of(SITE_DIR, snippet.category(), snippet.slug() + ".html"), html);
     }
@@ -224,92 +231,56 @@ String renderArrow(NavArrow arrow, String label, String symbol) {
     };
 }
 
-String renderWhyCards(JsonNode whyList) {
+String renderWhyCards(String whyCardTemplate, JsonNode whyList) {
     var cards = new ArrayList<String>();
     for (var w : whyList) {
-        cards.add("""
-                <div class="why-card">
-                  <div class="why-icon">%s</div>
-                  <h3>%s</h3>
-                  <p>%s</p>
-                </div>\
-        """.formatted(
-                w.get("icon").asText(),
-                escape(w.get("title").asText()),
-                escape(w.get("desc").asText())).stripTrailing());
+        var replacements = Map.of(
+                "icon",  w.get("icon").asText(),
+                "title", escape(w.get("title").asText()),
+                "desc",  escape(w.get("desc").asText()));
+        cards.add(replaceTokens(whyCardTemplate, replacements));
     }
     return String.join("\n", cards);
 }
 
-String renderRelatedCard(Snippet rel) {
-    return """
-                <a href="/%s/%s.html" class="tip-card">
-                  <div class="tip-card-body">
-                    <div class="tip-card-header">
-                      <div class="tip-badges">
-                        <span class="badge %s">%s</span>
-                        <span class="badge %s">%s</span>
-                      </div>
-                    </div>
-                    <h3>%s</h3>
-                  </div>
-                  <div class="card-code">
-                    <div class="card-code-layer old-layer">
-                      <div class="mini-label">%s</div>
-                      <pre class="code-text">%s</pre>
-                    </div>
-                    <div class="card-code-layer modern-layer">
-                      <div class="mini-label">%s</div>
-                      <pre class="code-text">%s</pre>
-                    </div>
-                    <span class="hover-hint">Hover to see modern ➜</span>
-                  </div>
-                  <div class="tip-card-footer">
-                    <span class="browser-support"><span class="dot"></span>JDK %s+</span>
-                    <span class="arrow-link">→</span>
-                  </div>
-                </a>\
-        """.formatted(
-            rel.category(), rel.slug(),
-            rel.category(), rel.catDisplay(),
-            rel.difficulty(), rel.difficulty(),
-            escape(rel.title()),
-            escape(rel.oldLabel()), escape(rel.oldCode()),
-            escape(rel.modernLabel()), escape(rel.modernCode()),
-            rel.jdkVersion()).stripTrailing();
+String renderRelatedCard(String relatedCardTemplate, Snippet rel) {
+    var replacements = Map.ofEntries(
+            Map.entry("category",    rel.category()),
+            Map.entry("slug",        rel.slug()),
+            Map.entry("catDisplay",  rel.catDisplay()),
+            Map.entry("difficulty",  rel.difficulty()),
+            Map.entry("title",       escape(rel.title())),
+            Map.entry("oldLabel",    escape(rel.oldLabel())),
+            Map.entry("oldCode",     escape(rel.oldCode())),
+            Map.entry("modernLabel", escape(rel.modernLabel())),
+            Map.entry("modernCode",  escape(rel.modernCode())),
+            Map.entry("jdkVersion",  rel.jdkVersion()));
+    return replaceTokens(relatedCardTemplate, replacements);
 }
 
-String renderRelatedSection(Snippet snippet, Map<String, Snippet> allSnippets) {
+String renderRelatedSection(String relatedCardTemplate, Snippet snippet, Map<String, Snippet> allSnippets) {
     return snippet.related().stream()
             .filter(allSnippets::containsKey)
-            .map(path -> renderRelatedCard(allSnippets.get(path)))
+            .map(path -> renderRelatedCard(relatedCardTemplate, allSnippets.get(path)))
             .collect(Collectors.joining("\n"));
 }
 
-String renderSocialShare(String slug, String title) {
+String renderSocialShare(String socialShareTemplate, String slug, String title) {
     var pageUrl = "%s/%s.html".formatted(BASE_URL, slug);
     var shareText = "%s \u2013 java.evolved".formatted(title);
     var encodedUrl = urlEncode(pageUrl);
     var encodedText = urlEncode(shareText);
 
-    return """
-              <div class="social-share">
-                <span class="share-label">Share</span>
-                <a href="https://x.com/intent/tweet?url=%s&text=%s" target="_blank" rel="noopener" class="share-btn share-x" aria-label="Share on X">𝕏</a>
-                <a href="https://bsky.app/intent/compose?text=%s%%20%s" target="_blank" rel="noopener" class="share-btn share-bsky" aria-label="Share on Bluesky">🦋</a>
-                <a href="https://www.linkedin.com/sharing/share-offsite/?url=%s" target="_blank" rel="noopener" class="share-btn share-li" aria-label="Share on LinkedIn">in</a>
-                <a href="https://www.reddit.com/submit?url=%s&title=%s" target="_blank" rel="noopener" class="share-btn share-reddit" aria-label="Share on Reddit">⬡</a>
-              </div>\
-            """.formatted(
-            encodedUrl, encodedText,
-            encodedText, encodedUrl,
-            encodedUrl,
-            encodedUrl, encodedText).stripTrailing();
+    var replacements = Map.of(
+            "encodedUrl",  encodedUrl,
+            "encodedText", encodedText);
+    return replaceTokens(socialShareTemplate, replacements);
 }
 
 // -- Main generation logic -----------------------------------------------
 
-String generateHtml(String template, Snippet snippet, Map<String, Snippet> allSnippets) {
+String generateHtml(String template, String whyCardTemplate, String relatedCardTemplate,
+        String socialShareTemplate, Snippet snippet, Map<String, Snippet> allSnippets) {
     var replacements = Map.ofEntries(
             Map.entry("title",              escape(snippet.title())),
             Map.entry("summary",            escape(snippet.summary())),
@@ -332,11 +303,15 @@ String generateHtml(String template, Snippet snippet, Map<String, Snippet> allSn
             Map.entry("summaryJson",        jsonEscape(snippet.summary())),
             Map.entry("categoryDisplayJson", jsonEscape(snippet.catDisplay())),
             Map.entry("navArrows",          renderNavArrows(snippet)),
-            Map.entry("whyCards",           renderWhyCards(snippet.whyModernWins())),
-            Map.entry("relatedCards",       renderRelatedSection(snippet, allSnippets)),
-            Map.entry("socialShare",        renderSocialShare(snippet.slug(), snippet.title()))
+            Map.entry("whyCards",           renderWhyCards(whyCardTemplate, snippet.whyModernWins())),
+            Map.entry("relatedCards",       renderRelatedSection(relatedCardTemplate, snippet, allSnippets)),
+            Map.entry("socialShare",        renderSocialShare(socialShareTemplate, snippet.slug(), snippet.title()))
     );
 
+    return replaceTokens(template, replacements);
+}
+
+String replaceTokens(String template, Map<String, String> replacements) {
     var m = TOKEN_PATTERN.matcher(template);
     var sb = new StringBuilder();
     while (m.find()) {
