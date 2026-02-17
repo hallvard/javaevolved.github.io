@@ -59,6 +59,16 @@ jbang export fatjar --output html-generators/generate.jar html-generators/genera
 
 This produces a self-contained ~2.2 MB JAR with all dependencies (Jackson) bundled. The `build-generator.yml` GitHub Action does this automatically when `generate.java` changes.
 
+## CI/CD Workflows
+
+Two GitHub Actions workflows automate the build and deploy pipeline:
+
+1. **`build-generator.yml`** — Triggered when `generate.java` changes on `main`. Uses JBang to rebuild the fat JAR and commits the updated `generate.jar` back to the repository.
+
+2. **`deploy.yml`** — Triggered when content, templates, the JAR, or site assets change on `main`. Runs `java -jar html-generators/generate.jar` to regenerate all HTML pages, `snippets.json`, and `index.html`, then deploys the `site/` folder to GitHub Pages.
+
+This means the deploy workflow always uses the pre-built fat JAR (no JBang required at deploy time), and the JAR stays in sync with the source automatically.
+
 ## Benchmark
 
 See [BENCHMARK.md](BENCHMARK.md) for performance comparisons across all four execution methods (AOT, fat JAR, JBang, Python).
