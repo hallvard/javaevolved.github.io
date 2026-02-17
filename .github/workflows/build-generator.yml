@@ -24,7 +24,7 @@ jobs:
       - uses: jbangdev/setup-jbang@main
 
       - name: Build fat JAR
-        run: jbang export fatjar --output html-generators/generate.jar html-generators/generate.java
+        run: jbang export fatjar --force --output html-generators/generate.jar html-generators/generate.java
 
       - name: Commit updated JAR
         run: |
