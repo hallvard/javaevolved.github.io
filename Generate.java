@@ -223,42 +223,56 @@ String renderArrow(NavArrow arrow, String label, String symbol) {
 String renderWhyCards(JsonNode whyList) {
     var cards = new ArrayList<String>();
     for (var w : whyList) {
-        cards.add("        <div class=\"why-card\">\n"
-                + "          <div class=\"why-icon\">%s</div>\n".formatted(w.get("icon").asText())
-                + "          <h3>%s</h3>\n".formatted(escape(w.get("title").asText()))
-                + "          <p>%s</p>\n".formatted(escape(w.get("desc").asText()))
-                + "        </div>");
+        cards.add("""
+                <div class="why-card">
+                  <div class="why-icon">%s</div>
+                  <h3>%s</h3>
+                  <p>%s</p>
+                </div>\
+        """.formatted(
+                w.get("icon").asText(),
+                escape(w.get("title").asText()),
+                escape(w.get("desc").asText())).stripTrailing());
     }
     return String.join("\n", cards);
 }
 
 String renderRelatedCard(Snippet rel) {
-    return "        <a href=\"/%s/%s.html\" class=\"tip-card\">\n".formatted(rel.category(), rel.slug())
-            + "          <div class=\"tip-card-body\">\n"
-            + "            <div class=\"tip-card-header\">\n"
-            + "              <div class=\"tip-badges\">\n"
-            + "                <span class=\"badge %s\">%s</span>\n".formatted(rel.category(), rel.catDisplay())
-            + "                <span class=\"badge %s\">%s</span>\n".formatted(rel.difficulty(), rel.difficulty())
-            + "              </div>\n"
-            + "            </div>\n"
-            + "            <h3>%s</h3>\n".formatted(escape(rel.title()))
-            + "          </div>\n"
-            + "          <div class=\"card-code\">\n"
-            + "            <div class=\"card-code-layer old-layer\">\n"
-            + "              <div class=\"mini-label\">%s</div>\n".formatted(escape(rel.oldLabel()))
-            + "              <pre class=\"code-text\">%s</pre>\n".formatted(escape(rel.oldCode()))
-            + "            </div>\n"
-            + "            <div class=\"card-code-layer modern-layer\">\n"
-            + "              <div class=\"mini-label\">%s</div>\n".formatted(escape(rel.modernLabel()))
-            + "              <pre class=\"code-text\">%s</pre>\n".formatted(escape(rel.modernCode()))
-            + "            </div>\n"
-            + "            <span class=\"hover-hint\">Hover to see modern ➜</span>\n"
-            + "          </div>\n"
-            + "          <div class=\"tip-card-footer\">\n"
-            + "            <span class=\"browser-support\"><span class=\"dot\"></span>JDK %s+</span>\n".formatted(rel.jdkVersion())
-            + "            <span class=\"arrow-link\">→</span>\n"
-            + "          </div>\n"
-            + "        </a>";
+    return """
+                <a href="/%s/%s.html" class="tip-card">
+                  <div class="tip-card-body">
+                    <div class="tip-card-header">
+                      <div class="tip-badges">
+                        <span class="badge %s">%s</span>
+                        <span class="badge %s">%s</span>
+                      </div>
+                    </div>
+                    <h3>%s</h3>
+                  </div>
+                  <div class="card-code">
+                    <div class="card-code-layer old-layer">
+                      <div class="mini-label">%s</div>
+                      <pre class="code-text">%s</pre>
+                    </div>
+                    <div class="card-code-layer modern-layer">
+                      <div class="mini-label">%s</div>
+                      <pre class="code-text">%s</pre>
+                    </div>
+                    <span class="hover-hint">Hover to see modern ➜</span>
+                  </div>
+                  <div class="tip-card-footer">
+                    <span class="browser-support"><span class="dot"></span>JDK %s+</span>
+                    <span class="arrow-link">→</span>
+                  </div>
+                </a>\
+        """.formatted(
+            rel.category(), rel.slug(),
+            rel.category(), rel.catDisplay(),
+            rel.difficulty(), rel.difficulty(),
+            escape(rel.title()),
+            escape(rel.oldLabel()), escape(rel.oldCode()),
+            escape(rel.modernLabel()), escape(rel.modernCode()),
+            rel.jdkVersion()).stripTrailing();
 }
 
 String renderRelatedSection(Snippet snippet, Map<String, Snippet> allSnippets) {
@@ -274,13 +288,19 @@ String renderSocialShare(String slug, String title) {
     var encodedUrl = urlEncode(pageUrl);
     var encodedText = urlEncode(shareText);
 
-    return "  <div class=\"social-share\">\n"
-            + "    <span class=\"share-label\">Share</span>\n"
-            + "    <a href=\"https://x.com/intent/tweet?url=%s&text=%s\" target=\"_blank\" rel=\"noopener\" class=\"share-btn share-x\" aria-label=\"Share on X\">𝕏</a>\n".formatted(encodedUrl, encodedText)
-            + "    <a href=\"https://bsky.app/intent/compose?text=%s%%20%s\" target=\"_blank\" rel=\"noopener\" class=\"share-btn share-bsky\" aria-label=\"Share on Bluesky\">🦋</a>\n".formatted(encodedText, encodedUrl)
-            + "    <a href=\"https://www.linkedin.com/sharing/share-offsite/?url=%s\" target=\"_blank\" rel=\"noopener\" class=\"share-btn share-li\" aria-label=\"Share on LinkedIn\">in</a>\n".formatted(encodedUrl)
-            + "    <a href=\"https://www.reddit.com/submit?url=%s&title=%s\" target=\"_blank\" rel=\"noopener\" class=\"share-btn share-reddit\" aria-label=\"Share on Reddit\">⬡</a>\n".formatted(encodedUrl, encodedText)
-            + "  </div>";
+    return """
+              <div class="social-share">
+                <span class="share-label">Share</span>
+                <a href="https://x.com/intent/tweet?url=%s&text=%s" target="_blank" rel="noopener" class="share-btn share-x" aria-label="Share on X">𝕏</a>
+                <a href="https://bsky.app/intent/compose?text=%s%%20%s" target="_blank" rel="noopener" class="share-btn share-bsky" aria-label="Share on Bluesky">🦋</a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=%s" target="_blank" rel="noopener" class="share-btn share-li" aria-label="Share on LinkedIn">in</a>
+                <a href="https://www.reddit.com/submit?url=%s&title=%s" target="_blank" rel="noopener" class="share-btn share-reddit" aria-label="Share on Reddit">⬡</a>
+              </div>\
+            """.formatted(
+            encodedUrl, encodedText,
+            encodedText, encodedUrl,
+            encodedUrl,
+            encodedUrl, encodedText).stripTrailing();
 }
 
 // -- Main generation logic -----------------------------------------------
