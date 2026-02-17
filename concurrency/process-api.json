@@ -30,5 +30,12 @@
       "desc": "onExit() returns a CompletableFuture for async monitoring."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "concurrency/thread-sleep-duration",
+  "next": "concurrency/concurrent-http-virtual",
+  "related": [
+    "concurrency/scoped-values",
+    "concurrency/concurrent-http-virtual",
+    "concurrency/completablefuture-chaining"
+  ]
 }

@@ -30,5 +30,12 @@
       "desc": "Rejects null elements during collection."
     }
   ],
-  "support": "Widely available since JDK 10 (March 2018)"
+  "support": "Widely available since JDK 10 (March 2018)",
+  "prev": "collections/stream-toarray-typed",
+  "next": "strings/string-isblank",
+  "related": [
+    "collections/immutable-map-creation",
+    "collections/immutable-set-creation",
+    "collections/map-entry-factory"
+  ]
 }

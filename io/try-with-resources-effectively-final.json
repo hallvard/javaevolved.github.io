@@ -30,5 +30,12 @@
       "desc": "Fewer lines, same resource safety."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "io/path-of",
+  "next": "io/files-mismatch",
+  "related": [
+    "io/path-of",
+    "io/reading-files",
+    "io/http-client"
+  ]
 }

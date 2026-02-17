@@ -30,5 +30,12 @@
       "desc": "Mix and match capabilities from multiple interfaces freely."
     }
   ],
-  "support": "Available since JDK 8 (March 2014)."
+  "support": "Available since JDK 8 (March 2014).",
+  "prev": "tooling/aot-class-preloading",
+  "next": null,
+  "related": [
+    "language/private-interface-methods",
+    "language/pattern-matching-instanceof",
+    "language/sealed-classes"
+  ]
 }

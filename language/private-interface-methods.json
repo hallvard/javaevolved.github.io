@@ -30,5 +30,12 @@
       "desc": "No more copy-paste between default methods."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "language/diamond-operator",
+  "next": "language/pattern-matching-switch",
+  "related": [
+    "language/compact-source-files",
+    "language/flexible-constructor-bodies",
+    "language/enhanced-for-with-var"
+  ]
 }

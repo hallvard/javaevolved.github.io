@@ -30,5 +30,12 @@
       "desc": "Newcomers run code immediately without learning build tools."
     }
   ],
-  "support": "Widely available since JDK 11 (Sept 2018)"
+  "support": "Widely available since JDK 11 (Sept 2018)",
+  "prev": "tooling/jshell-prototyping",
+  "next": "tooling/multi-file-source",
+  "related": [
+    "tooling/multi-file-source",
+    "tooling/compact-object-headers",
+    "tooling/jfr-profiling"
+  ]
 }

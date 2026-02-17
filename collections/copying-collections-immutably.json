@@ -30,5 +30,12 @@
       "desc": "Changes to the original don't affect the copy."
     }
   ],
-  "support": "Widely available since JDK 10 (March 2018)"
+  "support": "Widely available since JDK 10 (March 2018)",
+  "prev": "collections/immutable-set-creation",
+  "next": "collections/map-entry-factory",
+  "related": [
+    "collections/immutable-set-creation",
+    "collections/map-entry-factory",
+    "collections/immutable-list-creation"
+  ]
 }

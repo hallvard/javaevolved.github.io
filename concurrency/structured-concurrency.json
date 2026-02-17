@@ -30,5 +30,12 @@
       "desc": "Task lifetime matches the lexical scope in code."
     }
   ],
-  "support": "Preview in JDK 25 (fifth preview, JEP 505). Requires --enable-preview."
+  "support": "Preview in JDK 25 (fifth preview, JEP 505). Requires --enable-preview.",
+  "prev": "concurrency/virtual-threads",
+  "next": "concurrency/scoped-values",
+  "related": [
+    "concurrency/virtual-threads",
+    "concurrency/scoped-values",
+    "concurrency/stable-values"
+  ]
 }

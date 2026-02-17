@@ -30,5 +30,12 @@
       "desc": "No more static helper methods or factory patterns to work around the restriction."
     }
   ],
-  "support": "Finalized in JDK 25 LTS (JEP 513, Sept 2025)."
+  "support": "Finalized in JDK 25 LTS (JEP 513, Sept 2025).",
+  "prev": "language/compact-source-files",
+  "next": "language/enhanced-for-with-var",
+  "related": [
+    "language/type-inference-with-var",
+    "language/text-blocks-for-multiline-strings",
+    "language/switch-expressions"
+  ]
 }

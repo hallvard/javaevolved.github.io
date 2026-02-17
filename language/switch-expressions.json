@@ -30,5 +30,12 @@
       "desc": "The compiler ensures all cases are covered."
     }
   ],
-  "support": "Widely available since JDK 14 (March 2020)"
+  "support": "Widely available since JDK 14 (March 2020)",
+  "prev": "language/text-blocks-for-multiline-strings",
+  "next": "language/pattern-matching-instanceof",
+  "related": [
+    "language/compact-source-files",
+    "language/sealed-classes",
+    "language/record-patterns"
+  ]
 }

@@ -30,5 +30,12 @@
       "desc": "The compiler ensures all types are handled."
     }
   ],
-  "support": "Widely available since JDK 21 LTS (Sept 2023)"
+  "support": "Widely available since JDK 21 LTS (Sept 2023)",
+  "prev": "language/private-interface-methods",
+  "next": "language/guarded-patterns",
+  "related": [
+    "language/pattern-matching-instanceof",
+    "language/unnamed-variables",
+    "language/records-for-data-classes"
+  ]
 }

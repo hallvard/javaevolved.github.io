@@ -30,5 +30,12 @@
       "desc": "Administrators can change the strong algorithm via security properties."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "security/key-derivation-functions",
+  "next": "security/tls-default",
+  "related": [
+    "security/pem-encoding",
+    "security/key-derivation-functions",
+    "security/tls-default"
+  ]
 }

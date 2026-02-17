@@ -30,5 +30,12 @@
       "desc": "Records work with destructuring patterns in switch and instanceof."
     }
   ],
-  "support": "Widely available since JDK 16 (March 2021)"
+  "support": "Widely available since JDK 16 (March 2021)",
+  "prev": "language/pattern-matching-instanceof",
+  "next": "language/sealed-classes",
+  "related": [
+    "language/flexible-constructor-bodies",
+    "language/private-interface-methods",
+    "language/pattern-matching-switch"
+  ]
 }

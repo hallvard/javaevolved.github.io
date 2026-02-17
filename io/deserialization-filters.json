@@ -30,5 +30,12 @@
       "desc": "Set a global filter for all deserialization in the JVM."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "io/files-mismatch",
+  "next": "errors/helpful-npe",
+  "related": [
+    "io/inputstream-transferto",
+    "io/http-client",
+    "io/path-of"
+  ]
 }

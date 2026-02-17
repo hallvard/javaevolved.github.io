@@ -30,5 +30,12 @@
       "desc": "The predicate guarantees termination."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "streams/stream-of-nullable",
+  "next": "streams/stream-takewhile-dropwhile",
+  "related": [
+    "streams/virtual-thread-executor",
+    "streams/optional-or",
+    "streams/optional-ifpresentorelse"
+  ]
 }

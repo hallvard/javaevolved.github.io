@@ -30,5 +30,12 @@
       "desc": "Works with existing applications — just add JVM flags."
     }
   ],
-  "support": "Available in JDK 25 LTS (JEPs 514/515, Sept 2025). Experimental."
+  "support": "Available in JDK 25 LTS (JEPs 514/515, Sept 2025). Experimental.",
+  "prev": "tooling/compact-object-headers",
+  "next": "language/default-interface-methods",
+  "related": [
+    "tooling/jshell-prototyping",
+    "tooling/single-file-execution",
+    "tooling/multi-file-source"
+  ]
 }

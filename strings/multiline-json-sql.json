@@ -30,5 +30,12 @@
       "desc": "Easy to edit — no hunting for \\n and + operators."
     }
   ],
-  "support": "Widely available since JDK 15 (Sept 2020)"
+  "support": "Widely available since JDK 15 (Sept 2020)",
+  "prev": "strings/string-formatted",
+  "next": "strings/string-chars-stream",
+  "related": [
+    "strings/string-formatted",
+    "strings/string-repeat",
+    "strings/string-strip"
+  ]
 }

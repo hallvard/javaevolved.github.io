@@ -30,5 +30,12 @@
       "desc": "Combine with other downstream collectors."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "streams/stream-takewhile-dropwhile",
+  "next": "streams/stream-tolist",
+  "related": [
+    "streams/optional-ifpresentorelse",
+    "streams/stream-of-nullable",
+    "streams/stream-iterate-predicate"
+  ]
 }

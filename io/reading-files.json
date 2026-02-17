@@ -30,5 +30,12 @@
       "desc": "Correct encoding by default — no charset confusion."
     }
   ],
-  "support": "Widely available since JDK 11 (Sept 2018)"
+  "support": "Widely available since JDK 11 (Sept 2018)",
+  "prev": "io/http-client",
+  "next": "io/writing-files",
+  "related": [
+    "io/try-with-resources-effectively-final",
+    "io/writing-files",
+    "io/files-mismatch"
+  ]
 }

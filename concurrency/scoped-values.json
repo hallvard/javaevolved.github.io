@@ -30,5 +30,12 @@
       "desc": "Works efficiently with millions of virtual threads."
     }
   ],
-  "support": "Finalized in JDK 25 LTS (JEP 506, Sept 2025)."
+  "support": "Finalized in JDK 25 LTS (JEP 506, Sept 2025).",
+  "prev": "concurrency/structured-concurrency",
+  "next": "concurrency/stable-values",
+  "related": [
+    "concurrency/virtual-threads",
+    "concurrency/structured-concurrency",
+    "concurrency/stable-values"
+  ]
 }

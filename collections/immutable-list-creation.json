@@ -30,5 +30,12 @@
       "desc": "Rejects null elements at creation time, failing fast."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "language/exhaustive-switch",
+  "next": "collections/immutable-map-creation",
+  "related": [
+    "collections/immutable-map-creation",
+    "collections/immutable-set-creation",
+    "collections/sequenced-collections"
+  ]
 }

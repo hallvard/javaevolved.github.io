@@ -30,5 +30,12 @@
       "desc": "Write blocking code that scales like async code."
     }
   ],
-  "support": "Widely available since JDK 21 LTS (Sept 2023)"
+  "support": "Widely available since JDK 21 LTS (Sept 2023)",
+  "prev": "streams/optional-or",
+  "next": "concurrency/structured-concurrency",
+  "related": [
+    "concurrency/thread-sleep-duration",
+    "concurrency/scoped-values",
+    "concurrency/completablefuture-chaining"
+  ]
 }

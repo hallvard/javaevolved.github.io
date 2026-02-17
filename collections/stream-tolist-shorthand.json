@@ -30,5 +30,12 @@
       "desc": "stream → map → toList flows like English."
     }
   ],
-  "support": "Widely available since JDK 16 (March 2021)"
+  "support": "Widely available since JDK 16 (March 2021)",
+  "prev": "collections/sequenced-collections",
+  "next": "collections/collectors-teeing",
+  "related": [
+    "collections/collectors-teeing",
+    "collections/immutable-list-creation",
+    "collections/immutable-map-creation"
+  ]
 }

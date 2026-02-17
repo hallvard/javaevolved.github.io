@@ -30,5 +30,12 @@
       "desc": "Run multi-file programs like scripts."
     }
   ],
-  "support": "Available since JDK 22 (March 2024)"
+  "support": "Available since JDK 22 (March 2024)",
+  "prev": "tooling/single-file-execution",
+  "next": "tooling/jfr-profiling",
+  "related": [
+    "tooling/compact-object-headers",
+    "tooling/aot-class-preloading",
+    "tooling/jshell-prototyping"
+  ]
 }

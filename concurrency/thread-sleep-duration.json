@@ -30,5 +30,12 @@
       "desc": "Duration math: plus(), multipliedBy(), etc."
     }
   ],
-  "support": "Widely available since JDK 19 (Sept 2022)"
+  "support": "Widely available since JDK 19 (Sept 2022)",
+  "prev": "concurrency/executor-try-with-resources",
+  "next": "concurrency/process-api",
+  "related": [
+    "concurrency/stable-values",
+    "concurrency/concurrent-http-virtual",
+    "concurrency/completablefuture-chaining"
+  ]
 }

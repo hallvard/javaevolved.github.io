@@ -30,5 +30,12 @@
       "desc": "No add/remove possible after creation."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "collections/immutable-map-creation",
+  "next": "collections/copying-collections-immutably",
+  "related": [
+    "collections/copying-collections-immutably",
+    "collections/collectors-teeing",
+    "collections/stream-tolist-shorthand"
+  ]
 }

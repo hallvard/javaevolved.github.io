@@ -30,5 +30,12 @@
       "desc": "No intermediate trimmed string is created."
     }
   ],
-  "support": "Widely available since JDK 11 (Sept 2018)"
+  "support": "Widely available since JDK 11 (Sept 2018)",
+  "prev": "collections/unmodifiable-collectors",
+  "next": "strings/string-strip",
+  "related": [
+    "strings/string-formatted",
+    "strings/string-strip",
+    "strings/string-indent-transform"
+  ]
 }

@@ -30,5 +30,12 @@
       "desc": "sendAsync() returns CompletableFuture."
     }
   ],
-  "support": "Widely available since JDK 11 (Sept 2018)"
+  "support": "Widely available since JDK 11 (Sept 2018)",
+  "prev": "concurrency/lock-free-lazy-init",
+  "next": "io/reading-files",
+  "related": [
+    "io/reading-files",
+    "io/inputstream-transferto",
+    "io/try-with-resources-effectively-final"
+  ]
 }

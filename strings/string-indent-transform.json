@@ -30,5 +30,12 @@
       "desc": "No manual line splitting and StringBuilder loops."
     }
   ],
-  "support": "Widely available since JDK 12 (March 2019)"
+  "support": "Widely available since JDK 12 (March 2019)",
+  "prev": "strings/string-repeat",
+  "next": "strings/string-formatted",
+  "related": [
+    "strings/string-isblank",
+    "strings/string-strip",
+    "strings/multiline-json-sql"
+  ]
 }

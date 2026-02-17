@@ -30,5 +30,12 @@
       "desc": "No manual byte array comparison logic."
     }
   ],
-  "support": "Widely available since JDK 12 (March 2019)"
+  "support": "Widely available since JDK 12 (March 2019)",
+  "prev": "io/try-with-resources-effectively-final",
+  "next": "io/deserialization-filters",
+  "related": [
+    "io/inputstream-transferto",
+    "io/deserialization-filters",
+    "io/writing-files"
+  ]
 }

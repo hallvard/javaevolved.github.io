@@ -30,5 +30,12 @@
       "desc": "Leading whitespace is trimmed automatically based on the closing delimiter position."
     }
   ],
-  "support": "Widely available since JDK 15 (Sept 2020)"
+  "support": "Widely available since JDK 15 (Sept 2020)",
+  "prev": "language/type-inference-with-var",
+  "next": "language/switch-expressions",
+  "related": [
+    "language/switch-expressions",
+    "language/pattern-matching-instanceof",
+    "language/exhaustive-switch"
+  ]
 }

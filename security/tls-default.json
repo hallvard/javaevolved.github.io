@@ -30,5 +30,12 @@
       "desc": "Secure by default — no explicit protocol selection needed."
     }
   ],
-  "support": "Widely available since JDK 11 (Sept 2018)"
+  "support": "Widely available since JDK 11 (Sept 2018)",
+  "prev": "security/strong-random",
+  "next": "tooling/jshell-prototyping",
+  "related": [
+    "security/pem-encoding",
+    "security/key-derivation-functions",
+    "security/strong-random"
+  ]
 }

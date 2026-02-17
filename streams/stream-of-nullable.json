@@ -30,5 +30,12 @@
       "desc": "No NPE risk — null becomes empty stream."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "strings/string-chars-stream",
+  "next": "streams/stream-iterate-predicate",
+  "related": [
+    "streams/stream-takewhile-dropwhile",
+    "streams/stream-iterate-predicate",
+    "streams/stream-gatherers"
+  ]
 }

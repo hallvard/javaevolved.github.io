@@ -30,5 +30,12 @@
       "desc": "Encode/decode entire byte arrays at once."
     }
   ],
-  "support": "Widely available since JDK 17 LTS (Sept 2021)"
+  "support": "Widely available since JDK 17 LTS (Sept 2021)",
+  "prev": "datetime/math-clamp",
+  "next": "security/pem-encoding",
+  "related": [
+    "datetime/date-formatting",
+    "datetime/instant-precision",
+    "datetime/duration-and-period"
+  ]
 }

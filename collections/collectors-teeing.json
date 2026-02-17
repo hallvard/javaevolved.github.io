@@ -30,5 +30,12 @@
       "desc": "Merge into a record or value object directly."
     }
   ],
-  "support": "Widely available since JDK 12 (March 2019)"
+  "support": "Widely available since JDK 12 (March 2019)",
+  "prev": "collections/stream-tolist-shorthand",
+  "next": "collections/stream-toarray-typed",
+  "related": [
+    "collections/copying-collections-immutably",
+    "collections/unmodifiable-collectors",
+    "collections/stream-toarray-typed"
+  ]
 }

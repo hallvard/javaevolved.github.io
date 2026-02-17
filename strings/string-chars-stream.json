@@ -30,5 +30,12 @@
       "desc": "codePoints() correctly handles emoji and supplementary chars."
     }
   ],
-  "support": "Available since JDK 8+ (improved in 9+)"
+  "support": "Available since JDK 8+ (improved in 9+)",
+  "prev": "strings/multiline-json-sql",
+  "next": "streams/stream-of-nullable",
+  "related": [
+    "strings/string-repeat",
+    "strings/string-isblank",
+    "strings/string-formatted"
+  ]
 }

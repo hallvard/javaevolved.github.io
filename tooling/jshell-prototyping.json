@@ -30,5 +30,12 @@
       "desc": "Tab completion helps discover methods and parameters."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "security/tls-default",
+  "next": "tooling/single-file-execution",
+  "related": [
+    "tooling/aot-class-preloading",
+    "tooling/compact-object-headers",
+    "tooling/multi-file-source"
+  ]
 }

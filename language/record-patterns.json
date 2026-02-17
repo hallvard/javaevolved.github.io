@@ -30,5 +30,12 @@
       "desc": "Five lines become two — less ceremony, same clarity."
     }
   ],
-  "support": "Widely available since JDK 21 LTS (Sept 2023)"
+  "support": "Widely available since JDK 21 LTS (Sept 2023)",
+  "prev": "language/sealed-classes",
+  "next": "language/unnamed-variables",
+  "related": [
+    "language/diamond-operator",
+    "language/records-for-data-classes",
+    "language/unnamed-variables"
+  ]
 }

@@ -30,5 +30,12 @@
       "desc": "Model sum types naturally — sealed + records = ADTs in Java."
     }
   ],
-  "support": "Widely available since JDK 17 LTS (Sept 2021)"
+  "support": "Widely available since JDK 17 LTS (Sept 2021)",
+  "prev": "language/records-for-data-classes",
+  "next": "language/record-patterns",
+  "related": [
+    "language/switch-expressions",
+    "language/module-import-declarations",
+    "language/pattern-matching-switch"
+  ]
 }

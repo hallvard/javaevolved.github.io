@@ -30,5 +30,12 @@
       "desc": "Reads naturally at the end of a pipeline."
     }
   ],
-  "support": "Widely available since JDK 16 (March 2021)"
+  "support": "Widely available since JDK 16 (March 2021)",
+  "prev": "streams/collectors-flatmapping",
+  "next": "streams/stream-mapmulti",
+  "related": [
+    "streams/virtual-thread-executor",
+    "streams/stream-gatherers",
+    "streams/stream-iterate-predicate"
+  ]
 }

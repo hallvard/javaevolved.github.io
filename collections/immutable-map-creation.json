@@ -30,5 +30,12 @@
       "desc": "Null entries are rejected immediately."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "collections/immutable-list-creation",
+  "next": "collections/immutable-set-creation",
+  "related": [
+    "collections/copying-collections-immutably",
+    "collections/sequenced-collections",
+    "collections/stream-tolist-shorthand"
+  ]
 }

@@ -30,5 +30,12 @@
       "desc": "Chains naturally after findUser() or any Optional-returning method."
     }
   ],
-  "support": "Widely available since JDK 9 (Sept 2017)"
+  "support": "Widely available since JDK 9 (Sept 2017)",
+  "prev": "streams/virtual-thread-executor",
+  "next": "streams/optional-or",
+  "related": [
+    "streams/stream-tolist",
+    "streams/stream-gatherers",
+    "streams/collectors-flatmapping"
+  ]
 }

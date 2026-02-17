@@ -30,5 +30,12 @@
       "desc": "Emit zero, one, or many elements with full control."
     }
   ],
-  "support": "Widely available since JDK 16 (March 2021)"
+  "support": "Widely available since JDK 16 (March 2021)",
+  "prev": "streams/stream-tolist",
+  "next": "streams/stream-gatherers",
+  "related": [
+    "streams/stream-iterate-predicate",
+    "streams/stream-of-nullable",
+    "streams/stream-gatherers"
+  ]
 }

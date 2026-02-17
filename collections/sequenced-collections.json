@@ -30,5 +30,12 @@
       "desc": "Works the same on List, Deque, SortedSet."
     }
   ],
-  "support": "Widely available since JDK 21 LTS (Sept 2023)"
+  "support": "Widely available since JDK 21 LTS (Sept 2023)",
+  "prev": "collections/map-entry-factory",
+  "next": "collections/stream-tolist-shorthand",
+  "related": [
+    "collections/collectors-teeing",
+    "collections/immutable-set-creation",
+    "collections/immutable-map-creation"
+  ]
 }
