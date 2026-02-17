@@ -10,7 +10,7 @@
   "oldApproach": "Main Class Ceremony",
   "modernApproach": "void main()",
   "oldCode": "public class HelloWorld {\n    public static void main(\n            String[] args) {\n        System.out.println(\n            \"Hello, World!\");\n    }\n}",
-  "modernCode": "void main() {\n    println(\"Hello, World!\");\n}",
+  "modernCode": "void main() {\n    IO.println(\"Hello, World!\");\n}",
   "summary": "Write a complete program without class declaration or public static void main.",
   "explanation": "Compact source files remove the ceremony of class declarations and the main method signature for simple programs. Combined with implicit import of java.io.IO, even println is available directly.",
   "whyModernWins": [
