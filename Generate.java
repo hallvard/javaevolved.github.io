@@ -3,29 +3,13 @@
 //DEPS com.fasterxml.jackson.core:jackson-databind:2.18.3
 
 import module java.base;
-
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 
 /**
  * Generate HTML detail pages from JSON snippet files and slug-template.html.
  * JBang equivalent of generate.py — produces identical output.
- *
- * Uses modern Java features up to Java 25:
- *   - Compact source file / void main()  (JEP 512)
- *   - Module imports                      (JEP 511)
- *   - Records                             (JEP 395)
- *   - Sealed interfaces                   (JEP 409)
- *   - Pattern matching for switch         (JEP 441)
- *   - Text blocks                         (JEP 378)
- *   - Unnamed variables (_)               (JEP 456)
- *   - Stream.toList()                     (JDK 16)
- *   - String.formatted()                  (JDK 15)
- *   - SequencedMap                        (JDK 21)
  */
-
 static final String BASE_URL = "https://javaevolved.github.io";
 static final String TEMPLATE_FILE = "templates/slug-template.html";
 static final String WHY_CARD_TEMPLATE = "templates/why-card.html";
@@ -35,7 +19,6 @@ static final String CONTENT_DIR = "content";
 static final String SITE_DIR = "site";
 static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{(\\w+)}}");
 static final ObjectMapper MAPPER = new ObjectMapper();
-
 static final SequencedMap<String, String> CATEGORY_DISPLAY = buildCategoryDisplay();
 
 static SequencedMap<String, String> buildCategoryDisplay() {
@@ -77,13 +60,11 @@ record Snippet(JsonNode node) {
     String catDisplay() { return CATEGORY_DISPLAY.get(category()); }
 
     Optional<String> prev() {
-        return node.has("prev") && !node.get("prev").isNull()
-                ? Optional.of(node.get("prev").asText()) : Optional.empty();
+        return node.has("prev") && !node.get("prev").isNull() ? Optional.of(node.get("prev").asText()) : Optional.empty();
     }
 
     Optional<String> next() {
-        return node.has("next") && !node.get("next").isNull()
-                ? Optional.of(node.get("next").asText()) : Optional.empty();
+        return node.has("next") && !node.get("next").isNull() ? Optional.of(node.get("next").asText()) : Optional.empty();
     }
 
     List<String> related() {
@@ -117,8 +98,7 @@ void main() throws IOException {
 
     // Generate HTML files
     for (var snippet : allSnippets.values()) {
-        var html = generateHtml(template, whyCardTemplate, relatedCardTemplate, socialShareTemplate,
-                snippet, allSnippets).strip();
+        var html = generateHtml(template, whyCardTemplate, relatedCardTemplate, socialShareTemplate, snippet, allSnippets).strip();
         Files.createDirectories(Path.of(SITE_DIR, snippet.category()));
         Files.writeString(Path.of(SITE_DIR, snippet.category(), snippet.slug() + ".html"), html);
     }
@@ -127,8 +107,7 @@ void main() throws IOException {
     // Rebuild data/snippets.json
     var snippetsList = allSnippets.values().stream()
             .map(s -> {
-                Map<String, Object> map = MAPPER.convertValue(s.node(),
-                        new TypeReference<LinkedHashMap<String, Object>>() {});
+                Map<String, Object> map = MAPPER.convertValue(s.node(), new TypeReference<LinkedHashMap<String, Object>>() {});
                 EXCLUDED_KEYS.forEach(map::remove);
                 return map;
             })
@@ -136,15 +115,13 @@ void main() throws IOException {
 
     Files.createDirectories(Path.of(SITE_DIR, "data"));
     var prettyMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-    Files.writeString(Path.of(SITE_DIR, "data", "snippets.json"),
-            prettyMapper.writeValueAsString(snippetsList) + "\n");
+    Files.writeString(Path.of(SITE_DIR, "data", "snippets.json"), prettyMapper.writeValueAsString(snippetsList) + "\n");
     IO.println("Rebuilt data/snippets.json with %d entries".formatted(snippetsList.size()));
 
     // Patch index.html with the current snippet count
     int count = allSnippets.size();
     var indexPath = Path.of(SITE_DIR, "index.html");
-    var indexContent = Files.readString(indexPath)
-            .replace("{{snippetCount}}", String.valueOf(count));
+    var indexContent = Files.readString(indexPath).replace("{{snippetCount}}", String.valueOf(count));
     Files.writeString(indexPath, indexContent);
     IO.println("Patched index.html with snippet count: %d".formatted(count));
 }
@@ -176,11 +153,7 @@ SequencedMap<String, Snippet> loadAllSnippets() throws IOException {
 String escape(String text) {
     return switch (text) {
         case null -> "";
-        case String s -> s.replace("&", "&amp;")
-                          .replace("<", "&lt;")
-                          .replace(">", "&gt;")
-                          .replace("\"", "&quot;")
-                          .replace("'", "&#x27;");
+        case String s -> s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#x27;");
     };
 }
 
@@ -220,10 +193,8 @@ String renderNavArrows(Snippet snippet) {
 
 String renderArrow(NavArrow arrow, String label, String symbol) {
     return switch (arrow) {
-        case NavArrow.Link(var href) ->
-                "<a href=\"%s\" aria-label=\"%s\">%s</a>".formatted(href, label, symbol);
-        case NavArrow.Disabled() ->
-                "<span class=\"nav-arrow-disabled\">%s</span>".formatted(symbol);
+        case NavArrow.Link(var href) -> "<a href=\"%s\" aria-label=\"%s\">%s</a>".formatted(href, label, symbol);
+        case NavArrow.Disabled() -> "<span class=\"nav-arrow-disabled\">%s</span>".formatted(symbol);
         case NavArrow.Empty() -> "";
     };
 }
@@ -313,8 +284,7 @@ String replaceTokens(String template, Map<String, String> replacements) {
     var sb = new StringBuilder();
     while (m.find()) {
         var key = m.group(1);
-        m.appendReplacement(sb, Matcher.quoteReplacement(
-                replacements.getOrDefault(key, m.group(0))));
+        m.appendReplacement(sb, Matcher.quoteReplacement(replacements.getOrDefault(key, m.group(0))));
     }
     m.appendTail(sb);
     return sb.toString();
