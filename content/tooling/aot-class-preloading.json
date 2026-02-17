@@ -34,7 +34,7 @@
     "state": "experimental",
     "description": "Available in JDK 25 LTS (JEPs 514/515, Sept 2025). Experimental."
   },
-  "prev": "tooling/compact-object-headers",
+  "prev": "tooling/built-in-http-server",
   "next": "language/default-interface-methods",
   "related": [
     "tooling/jshell-prototyping",

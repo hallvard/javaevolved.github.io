@@ -35,7 +35,7 @@
     "description": "Finalized in JDK 25 LTS (JEP 519, Sept 2025)."
   },
   "prev": "tooling/jfr-profiling",
-  "next": "tooling/aot-class-preloading",
+  "next": "tooling/built-in-http-server",
   "related": [
     "tooling/jshell-prototyping",
     "tooling/single-file-execution",
