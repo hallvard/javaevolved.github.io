@@ -960,25 +960,30 @@ nav {
 }
 
 .info-card {
-  padding: 16px;
+  padding: 20px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   text-align: center;
 }
 
-.info-card .label {
+.info-label {
   font-size: 0.72rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-.info-card .value {
-  font-size: 1.1rem;
+.info-value {
+  font-size: 1.15rem;
   font-weight: 700;
 }
+
+.info-value.red { color: #ef4444; }
+.info-value.green { color: #22c55e; }
+.info-value.accent { color: var(--accent); }
+.info-value.blue { color: #3b82f6; }
 
 /* ---------- JDK Support Section ---------- */
 .bs-section {
