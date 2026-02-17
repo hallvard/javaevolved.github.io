@@ -1,0 +1,34 @@
+{
+  "id": 36,
+  "slug": "stream-of-nullable",
+  "title": "Stream.ofNullable()",
+  "category": "streams",
+  "difficulty": "beginner",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Null Check",
+  "modernApproach": "ofNullable()",
+  "oldCode": "Stream<String> s = val != null\n    ? Stream.of(val)\n    : Stream.empty();",
+  "modernCode": "Stream<String> s =\n    Stream.ofNullable(val);",
+  "summary": "Create a zero-or-one element stream from a nullable value.",
+  "explanation": "Stream.ofNullable() returns a single-element stream if the value is non-null, or an empty stream if null. Eliminates the ternary null check pattern.",
+  "whyModernWins": [
+    {
+      "icon": "📏",
+      "title": "Concise",
+      "desc": "One call replaces the ternary conditional."
+    },
+    {
+      "icon": "🔗",
+      "title": "Flatmap-friendly",
+      "desc": "Perfect inside flatMap to skip null values."
+    },
+    {
+      "icon": "🛡️",
+      "title": "Null-safe",
+      "desc": "No NPE risk — null becomes empty stream."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

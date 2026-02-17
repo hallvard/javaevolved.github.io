@@ -1,0 +1,34 @@
+{
+  "id": 4,
+  "slug": "pattern-matching-instanceof",
+  "title": "Pattern matching for instanceof",
+  "category": "language",
+  "difficulty": "beginner",
+  "jdkVersion": "16",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 16+",
+  "oldApproach": "instanceof + Cast",
+  "modernApproach": "Pattern Variable",
+  "oldCode": "if (obj instanceof String) {\n    String s = (String) obj;\n    System.out.println(s.length());\n}",
+  "modernCode": "if (obj instanceof String s) {\n    System.out.println(s.length());\n}",
+  "summary": "Combine type check and cast in one step with pattern matching.",
+  "explanation": "Pattern matching for instanceof eliminates the redundant cast after a type check. The variable is automatically scoped to where the pattern matches, making code safer and shorter.",
+  "whyModernWins": [
+    {
+      "icon": "🔄",
+      "title": "No redundant cast",
+      "desc": "Type check and variable binding happen in a single expression."
+    },
+    {
+      "icon": "📏",
+      "title": "Fewer lines",
+      "desc": "One line instead of two — the cast line disappears entirely."
+    },
+    {
+      "icon": "🛡️",
+      "title": "Scope safety",
+      "desc": "The pattern variable is only in scope where the type is guaranteed."
+    }
+  ],
+  "support": "Widely available since JDK 16 (March 2021)"
+}

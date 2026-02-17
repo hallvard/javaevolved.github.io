@@ -1,0 +1,34 @@
+{
+  "id": 78,
+  "slug": "strong-random",
+  "title": "Strong random generation",
+  "category": "security",
+  "difficulty": "beginner",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "new SecureRandom()",
+  "modernApproach": "getInstanceStrong()",
+  "oldCode": "// Default algorithm — may not be\n// the strongest available\nSecureRandom random =\n    new SecureRandom();\nbyte[] bytes = new byte[32];\nrandom.nextBytes(bytes);",
+  "modernCode": "// Platform's strongest algorithm\nSecureRandom random =\n    SecureRandom.getInstanceStrong();\nbyte[] bytes = new byte[32];\nrandom.nextBytes(bytes);",
+  "summary": "Get the platform's strongest SecureRandom implementation.",
+  "explanation": "getInstanceStrong() returns the SecureRandom implementation configured as the strongest on the platform. This is controlled by the securerandom.strongAlgorithms security property.",
+  "whyModernWins": [
+    {
+      "icon": "🛡️",
+      "title": "Strongest available",
+      "desc": "Automatically selects the best algorithm for the platform."
+    },
+    {
+      "icon": "📖",
+      "title": "Explicit intent",
+      "desc": "Clearly communicates that strong randomness is required."
+    },
+    {
+      "icon": "🔧",
+      "title": "Configurable",
+      "desc": "Administrators can change the strong algorithm via security properties."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

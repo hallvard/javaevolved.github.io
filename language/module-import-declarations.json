@@ -1,0 +1,34 @@
+{
+  "id": 17,
+  "slug": "module-import-declarations",
+  "title": "Module import declarations",
+  "category": "language",
+  "difficulty": "intermediate",
+  "jdkVersion": "25",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 25+",
+  "oldApproach": "Many Imports",
+  "modernApproach": "import module",
+  "oldCode": "import java.util.List;\nimport java.util.Map;\nimport java.util.stream.Collectors;\nimport java.io.IOException;\nimport java.nio.file.Files;\nimport java.nio.file.Path;",
+  "modernCode": "import module java.base;\n\n// All of java.util, java.io, java.nio\n// etc. available in one line",
+  "summary": "Import all exported packages of a module with a single declaration.",
+  "explanation": "Module import declarations let you import everything a module exports with one line. This is especially useful for java.base which covers collections, I/O, streams, and more.",
+  "whyModernWins": [
+    {
+      "icon": "🧹",
+      "title": "One line",
+      "desc": "Replace a wall of imports with a single module import."
+    },
+    {
+      "icon": "📦",
+      "title": "Module-aware",
+      "desc": "Leverages the module system to import coherent sets of packages."
+    },
+    {
+      "icon": "🚀",
+      "title": "Quick starts",
+      "desc": "Perfect for scripts and prototypes where import lists are tedious."
+    }
+  ],
+  "support": "Finalized in JDK 25 LTS (JEP 511, Sept 2025)."
+}

@@ -1,0 +1,34 @@
+{
+  "id": 80,
+  "slug": "jshell-prototyping",
+  "title": "JShell for prototyping",
+  "category": "tooling",
+  "difficulty": "beginner",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Create File + Compile + Run",
+  "modernApproach": "jshell REPL",
+  "oldCode": "// 1. Create Test.java\n// 2. javac Test.java\n// 3. java Test\n// Just to test one expression!",
+  "modernCode": "$ jshell\njshell> \"hello\".chars().count()\n$1 ==> 5\njshell> List.of(1,2,3).reversed()\n$2 ==> [3, 2, 1]",
+  "summary": "Try Java expressions interactively without creating files.",
+  "explanation": "JShell is a Read-Eval-Print Loop for Java. Test expressions, experiment with APIs, and prototype code without creating files, compiling, or writing a main method. Tab completion and inline docs included.",
+  "whyModernWins": [
+    {
+      "icon": "⚡",
+      "title": "Instant feedback",
+      "desc": "Type an expression, see the result immediately."
+    },
+    {
+      "icon": "📝",
+      "title": "No files needed",
+      "desc": "No .java files, no compilation step."
+    },
+    {
+      "icon": "🔍",
+      "title": "API exploration",
+      "desc": "Tab completion helps discover methods and parameters."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

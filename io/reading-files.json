@@ -1,0 +1,34 @@
+{
+  "id": 57,
+  "slug": "reading-files",
+  "title": "Reading files",
+  "category": "io",
+  "difficulty": "beginner",
+  "jdkVersion": "11",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 11+",
+  "oldApproach": "BufferedReader",
+  "modernApproach": "Files.readString()",
+  "oldCode": "StringBuilder sb = new StringBuilder();\ntry (BufferedReader br =\n    new BufferedReader(\n        new FileReader(\"data.txt\"))) {\n    String line;\n    while ((line = br.readLine()) != null)\n        sb.append(line).append(\"\\n\");\n}\nString content = sb.toString();",
+  "modernCode": "String content =\n    Files.readString(Path.of(\"data.txt\"));",
+  "summary": "Read an entire file into a String with one line.",
+  "explanation": "Files.readString() reads a file's entire content into a String. It handles encoding (UTF-8 by default) and resource cleanup. For large files, use Files.lines() for lazy streaming.",
+  "whyModernWins": [
+    {
+      "icon": "📏",
+      "title": "One line",
+      "desc": "Replace 8 lines of BufferedReader boilerplate."
+    },
+    {
+      "icon": "🧹",
+      "title": "Auto cleanup",
+      "desc": "File handle is closed automatically."
+    },
+    {
+      "icon": "🌐",
+      "title": "UTF-8 default",
+      "desc": "Correct encoding by default — no charset confusion."
+    }
+  ],
+  "support": "Widely available since JDK 11 (Sept 2018)"
+}

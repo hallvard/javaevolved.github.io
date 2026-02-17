@@ -1,0 +1,34 @@
+{
+  "id": 35,
+  "slug": "string-chars-stream",
+  "title": "String chars as stream",
+  "category": "strings",
+  "difficulty": "beginner",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Manual Loop",
+  "modernApproach": "chars() Stream",
+  "oldCode": "for (int i = 0; i < str.length(); i++) {\n    char c = str.charAt(i);\n    if (Character.isDigit(c)) {\n        process(c);\n    }\n}",
+  "modernCode": "str.chars()\n    .filter(Character::isDigit)\n    .forEach(c -> process((char) c));",
+  "summary": "Process string characters as a stream pipeline.",
+  "explanation": "String.chars() returns an IntStream of character values, enabling functional processing. For Unicode support, codePoints() handles supplementary characters correctly.",
+  "whyModernWins": [
+    {
+      "icon": "🔗",
+      "title": "Chainable",
+      "desc": "Use filter, map, collect on character streams."
+    },
+    {
+      "icon": "📐",
+      "title": "Declarative",
+      "desc": "Describe what to do, not how to loop."
+    },
+    {
+      "icon": "🌐",
+      "title": "Unicode-ready",
+      "desc": "codePoints() correctly handles emoji and supplementary chars."
+    }
+  ],
+  "support": "Available since JDK 8+ (improved in 9+)"
+}

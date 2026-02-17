@@ -1,0 +1,34 @@
+{
+  "id": 28,
+  "slug": "unmodifiable-collectors",
+  "title": "Unmodifiable collectors",
+  "category": "collections",
+  "difficulty": "intermediate",
+  "jdkVersion": "10",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 10+",
+  "oldApproach": "collectingAndThen",
+  "modernApproach": "toUnmodifiable*()",
+  "oldCode": "List<String> list = stream.collect(\n    Collectors.collectingAndThen(\n        Collectors.toList(),\n        Collections::unmodifiableList\n    )\n);",
+  "modernCode": "List<String> list = stream.collect(\n    Collectors.toUnmodifiableList()\n);",
+  "summary": "Collect directly to unmodifiable collections.",
+  "explanation": "Java 10 added toUnmodifiableList(), toUnmodifiableSet(), and toUnmodifiableMap() collectors. No more wrapping with collectingAndThen.",
+  "whyModernWins": [
+    {
+      "icon": "📏",
+      "title": "Direct",
+      "desc": "One collector instead of wrapping with collectingAndThen."
+    },
+    {
+      "icon": "🔒",
+      "title": "Immutable",
+      "desc": "Result cannot be modified — no accidental mutations."
+    },
+    {
+      "icon": "🚫",
+      "title": "Null-safe",
+      "desc": "Rejects null elements during collection."
+    }
+  ],
+  "support": "Widely available since JDK 10 (March 2018)"
+}

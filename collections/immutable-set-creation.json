@@ -1,0 +1,34 @@
+{
+  "id": 21,
+  "slug": "immutable-set-creation",
+  "title": "Immutable set creation",
+  "category": "collections",
+  "difficulty": "beginner",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Verbose Wrapping",
+  "modernApproach": "Set.of()",
+  "oldCode": "Set<String> set =\n    Collections.unmodifiableSet(\n        new HashSet<>(\n            Arrays.asList(\"a\", \"b\", \"c\")\n        )\n    );",
+  "modernCode": "Set<String> set =\n    Set.of(\"a\", \"b\", \"c\");",
+  "summary": "Create immutable sets with a single factory call.",
+  "explanation": "Set.of() creates a truly immutable set that rejects nulls and duplicate elements at creation time. No more wrapping mutable sets.",
+  "whyModernWins": [
+    {
+      "icon": "📏",
+      "title": "Concise",
+      "desc": "One line instead of three nested calls."
+    },
+    {
+      "icon": "🚫",
+      "title": "Detects duplicates",
+      "desc": "Throws if you accidentally pass duplicate elements."
+    },
+    {
+      "icon": "🔒",
+      "title": "Immutable",
+      "desc": "No add/remove possible after creation."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

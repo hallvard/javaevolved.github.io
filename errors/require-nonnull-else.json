@@ -1,0 +1,34 @@
+{
+  "id": 66,
+  "slug": "require-nonnull-else",
+  "title": "Objects.requireNonNullElse()",
+  "category": "errors",
+  "difficulty": "beginner",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Ternary Null Check",
+  "modernApproach": "requireNonNullElse()",
+  "oldCode": "String name = input != null\n    ? input\n    : \"default\";\n// easy to get the order wrong",
+  "modernCode": "String name = Objects\n    .requireNonNullElse(\n        input, \"default\"\n    );",
+  "summary": "Get a non-null value with a clear default, no ternary needed.",
+  "explanation": "requireNonNullElse returns the first argument if non-null, otherwise the second. The default itself cannot be null — it throws NPE if both are null, catching bugs early.",
+  "whyModernWins": [
+    {
+      "icon": "📖",
+      "title": "Clear intent",
+      "desc": "Method name describes exactly what it does."
+    },
+    {
+      "icon": "🛡️",
+      "title": "Null-safe default",
+      "desc": "The default value is also checked for null."
+    },
+    {
+      "icon": "📏",
+      "title": "Readable",
+      "desc": "Better than ternary for simple null-or-default logic."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

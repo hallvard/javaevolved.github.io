@@ -1,0 +1,34 @@
+{
+  "id": 37,
+  "slug": "stream-iterate-predicate",
+  "title": "Stream.iterate() with predicate",
+  "category": "streams",
+  "difficulty": "intermediate",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "iterate + limit",
+  "modernApproach": "iterate(seed, pred, op)",
+  "oldCode": "Stream.iterate(1, n -> n * 2)\n    .limit(10)\n    .forEach(System.out::println);\n// can't stop at a condition",
+  "modernCode": "Stream.iterate(\n    1,\n    n -> n < 1000,\n    n -> n * 2\n).forEach(System.out::println);\n// stops when n >= 1000",
+  "summary": "Use a predicate to stop iteration — like a for-loop in stream form.",
+  "explanation": "The three-argument Stream.iterate(seed, hasNext, next) works like a for-loop: seed is the start, hasNext determines when to stop, and next produces the next value.",
+  "whyModernWins": [
+    {
+      "icon": "🎯",
+      "title": "Natural termination",
+      "desc": "Stop based on a condition, not an arbitrary limit."
+    },
+    {
+      "icon": "📐",
+      "title": "For-loop equivalent",
+      "desc": "Same semantics as for(seed; hasNext; next)."
+    },
+    {
+      "icon": "🛡️",
+      "title": "No infinite stream risk",
+      "desc": "The predicate guarantees termination."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

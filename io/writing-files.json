@@ -1,0 +1,34 @@
+{
+  "id": 58,
+  "slug": "writing-files",
+  "title": "Writing files",
+  "category": "io",
+  "difficulty": "beginner",
+  "jdkVersion": "11",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 11+",
+  "oldApproach": "FileWriter + BufferedWriter",
+  "modernApproach": "Files.writeString()",
+  "oldCode": "try (BufferedWriter bw =\n    new BufferedWriter(\n        new FileWriter(\"out.txt\"))) {\n    bw.write(content);\n}",
+  "modernCode": "Files.writeString(\n    Path.of(\"out.txt\"),\n    content\n);",
+  "summary": "Write a String to a file with one line.",
+  "explanation": "Files.writeString() writes content to a file with UTF-8 encoding by default. Options can be passed for appending, creating, etc.",
+  "whyModernWins": [
+    {
+      "icon": "📏",
+      "title": "One line",
+      "desc": "No writer wrapping or try-with-resources needed."
+    },
+    {
+      "icon": "🛡️",
+      "title": "Safe defaults",
+      "desc": "UTF-8 encoding, proper file handle cleanup."
+    },
+    {
+      "icon": "🔧",
+      "title": "Options",
+      "desc": "Pass OpenOption flags for append, create, etc."
+    }
+  ],
+  "support": "Widely available since JDK 11 (Sept 2018)"
+}

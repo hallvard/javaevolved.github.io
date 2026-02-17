@@ -1,0 +1,34 @@
+{
+  "id": 73,
+  "slug": "instant-precision",
+  "title": "Instant with nanosecond precision",
+  "category": "datetime",
+  "difficulty": "intermediate",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Milliseconds",
+  "modernApproach": "Nanoseconds",
+  "oldCode": "// Millisecond precision only\nlong millis =\n    System.currentTimeMillis();\n// 1708012345678",
+  "modernCode": "// Microsecond/nanosecond precision\nInstant now = Instant.now();\n// 2025-02-15T20:12:25.678901234Z\nlong nanos = now.getNano();",
+  "summary": "Get timestamps with microsecond or nanosecond precision.",
+  "explanation": "Java 9 improved the clock resolution so Instant.now() captures microsecond precision on most platforms (nanosecond on some). The old currentTimeMillis() only gives milliseconds.",
+  "whyModernWins": [
+    {
+      "icon": "🎯",
+      "title": "Higher precision",
+      "desc": "Microsecond/nanosecond vs millisecond timestamps."
+    },
+    {
+      "icon": "📐",
+      "title": "Type-safe",
+      "desc": "Instant carries its precision — no ambiguous longs."
+    },
+    {
+      "icon": "🌐",
+      "title": "UTC-based",
+      "desc": "Instant is always in UTC — no timezone confusion."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

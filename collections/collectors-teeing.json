@@ -1,0 +1,34 @@
+{
+  "id": 26,
+  "slug": "collectors-teeing",
+  "title": "Collectors.teeing()",
+  "category": "collections",
+  "difficulty": "intermediate",
+  "jdkVersion": "12",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 12+",
+  "oldApproach": "Two Passes",
+  "modernApproach": "teeing()",
+  "oldCode": "long count = items.stream().count();\ndouble sum = items.stream()\n    .mapToDouble(Item::price)\n    .sum();\nvar result = new Stats(count, sum);",
+  "modernCode": "var result = items.stream().collect(\n    Collectors.teeing(\n        Collectors.counting(),\n        Collectors.summingDouble(Item::price),\n        Stats::new\n    )\n);",
+  "summary": "Compute two aggregations in a single stream pass.",
+  "explanation": "Collectors.teeing() sends each element to two downstream collectors and merges the results. This avoids streaming the data twice or using a mutable accumulator.",
+  "whyModernWins": [
+    {
+      "icon": "⚡",
+      "title": "Single pass",
+      "desc": "Process the stream once instead of twice."
+    },
+    {
+      "icon": "🧩",
+      "title": "Composable",
+      "desc": "Combine any two collectors with a merger function."
+    },
+    {
+      "icon": "🔒",
+      "title": "Immutable result",
+      "desc": "Merge into a record or value object directly."
+    }
+  ],
+  "support": "Widely available since JDK 12 (March 2019)"
+}

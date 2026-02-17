@@ -1,0 +1,34 @@
+{
+  "id": 53,
+  "slug": "process-api",
+  "title": "Modern Process API",
+  "category": "concurrency",
+  "difficulty": "intermediate",
+  "jdkVersion": "9",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 9+",
+  "oldApproach": "Runtime.exec()",
+  "modernApproach": "ProcessHandle",
+  "oldCode": "Process p = Runtime.getRuntime()\n    .exec(\"ls -la\");\nint code = p.waitFor();\n// no way to get PID\n// no easy process info",
+  "modernCode": "ProcessHandle ph =\n    ProcessHandle.current();\nlong pid = ph.pid();\nph.info().command()\n    .ifPresent(System.out::println);\nph.children().forEach(\n    c -> System.out.println(c.pid()));",
+  "summary": "Inspect and manage OS processes with ProcessHandle.",
+  "explanation": "ProcessHandle provides PIDs, process info (command, arguments, start time, CPU usage), parent/child relationships, and process destruction. No more undocumented Process internals.",
+  "whyModernWins": [
+    {
+      "icon": "🔍",
+      "title": "Full info",
+      "desc": "Access PID, command, arguments, start time, CPU usage."
+    },
+    {
+      "icon": "🌳",
+      "title": "Process tree",
+      "desc": "Navigate parent, children, and descendants."
+    },
+    {
+      "icon": "📊",
+      "title": "Monitoring",
+      "desc": "onExit() returns a CompletableFuture for async monitoring."
+    }
+  ],
+  "support": "Widely available since JDK 9 (Sept 2017)"
+}

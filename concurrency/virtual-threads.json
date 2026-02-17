@@ -1,0 +1,34 @@
+{
+  "id": 46,
+  "slug": "virtual-threads",
+  "title": "Virtual threads",
+  "category": "concurrency",
+  "difficulty": "beginner",
+  "jdkVersion": "21",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 21+",
+  "oldApproach": "Platform Threads",
+  "modernApproach": "Virtual Threads",
+  "oldCode": "Thread thread = new Thread(() -> {\n    System.out.println(\"hello\");\n});\nthread.start();\nthread.join();",
+  "modernCode": "Thread.startVirtualThread(() -> {\n    System.out.println(\"hello\");\n}).join();",
+  "summary": "Create millions of lightweight virtual threads instead of heavy OS threads.",
+  "explanation": "Virtual threads are lightweight threads managed by the JVM, not the OS. You can create millions of them without tuning thread pools. They're ideal for I/O-bound tasks like HTTP calls and database queries.",
+  "whyModernWins": [
+    {
+      "icon": "⚡",
+      "title": "Lightweight",
+      "desc": "Virtual threads use KB of memory, platform threads use MB."
+    },
+    {
+      "icon": "♾️",
+      "title": "Scalable",
+      "desc": "Create millions of threads — no pool sizing needed."
+    },
+    {
+      "icon": "🧹",
+      "title": "Simple model",
+      "desc": "Write blocking code that scales like async code."
+    }
+  ],
+  "support": "Widely available since JDK 21 LTS (Sept 2023)"
+}

@@ -1,0 +1,34 @@
+{
+  "id": 2,
+  "slug": "text-blocks-for-multiline-strings",
+  "title": "Text blocks for multiline strings",
+  "category": "language",
+  "difficulty": "beginner",
+  "jdkVersion": "15",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 15+",
+  "oldApproach": "String Concatenation",
+  "modernApproach": "Text Blocks",
+  "oldCode": "String json = \"{\\n\" +\n    \"  \\\"name\\\": \\\"Duke\\\",\\n\" +\n    \"  \\\"age\\\": 30\\n\" +\n    \"}\";",
+  "modernCode": "String json = \"\"\"\n    {\n      \"name\": \"Duke\",\n      \"age\": 30\n    }\"\"\";",
+  "summary": "Write multiline strings naturally with triple-quote text blocks.",
+  "explanation": "Text blocks let you write multiline strings exactly as they appear. No more escaping quotes or adding \\n. The compiler strips incidental indentation automatically.",
+  "whyModernWins": [
+    {
+      "icon": "📖",
+      "title": "Readable as-is",
+      "desc": "JSON, SQL, and HTML look like real JSON, SQL, and HTML in your source."
+    },
+    {
+      "icon": "🚫",
+      "title": "No escape hell",
+      "desc": "Embedded quotes don't need backslash escaping."
+    },
+    {
+      "icon": "📐",
+      "title": "Smart indentation",
+      "desc": "Leading whitespace is trimmed automatically based on the closing delimiter position."
+    }
+  ],
+  "support": "Widely available since JDK 15 (Sept 2020)"
+}
