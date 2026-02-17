@@ -5,7 +5,7 @@
   "category": "language",
   "difficulty": "intermediate",
   "jdkVersion": "16",
-  "oldLabel": "Java 8",
+  "oldLabel": "Java 16",
   "modernLabel": "Java 16+",
   "oldApproach": "Explicit constructor validation",
   "modernApproach": "Compact constructor",
