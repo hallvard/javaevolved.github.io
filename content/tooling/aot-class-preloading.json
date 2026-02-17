@@ -31,7 +31,7 @@
     }
   ],
   "support": {
-    "state": "experimental",
+    "state": "available",
     "description": "Available in JDK 25 LTS (JEPs 514/515, Sept 2025). Experimental."
   },
   "prev": "tooling/built-in-http-server",
