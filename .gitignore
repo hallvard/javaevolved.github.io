@@ -1,0 +1,14 @@
+# Generated HTML detail pages (built by generate.py from JSON sources)
+language/*.html
+collections/*.html
+strings/*.html
+streams/*.html
+concurrency/*.html
+io/*.html
+errors/*.html
+datetime/*.html
+security/*.html
+tooling/*.html
+
+# Generated aggregate file (built by generate.py from individual JSON sources)
+data/snippets.json

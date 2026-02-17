@@ -385,6 +385,21 @@ def main():
 
     print(f"Generated {len(all_snippets)} HTML files")
 
+    # Rebuild data/snippets.json from individual JSON files
+    # This file is used at runtime by app.js for search
+    snippets_list = []
+    for key, data in all_snippets.items():
+        # Exclude internal fields and navigation-only fields
+        entry = {k: v for k, v in data.items() if k not in ("_path", "prev", "next", "related")}
+        snippets_list.append(entry)
+
+    os.makedirs("data", exist_ok=True)
+    with open("data/snippets.json", "w") as f:
+        json.dump(snippets_list, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+    print(f"Rebuilt data/snippets.json with {len(snippets_list)} entries")
+
 
 if __name__ == "__main__":
     main()

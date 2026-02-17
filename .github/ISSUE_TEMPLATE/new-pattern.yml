@@ -1,0 +1,135 @@
+---
+name: New Pattern Submission
+description: Submit a new modern Java pattern
+title: "[Pattern] "
+labels: ["new-pattern"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## How to submit a new pattern
+
+        Patterns are defined as **JSON files** in category subfolders.
+        Please provide the information below and we'll create the JSON file,
+        or submit a PR with the JSON file directly.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - language
+        - collections
+        - strings
+        - streams
+        - concurrency
+        - io
+        - errors
+        - datetime
+        - security
+        - tooling
+    validations:
+      required: true
+
+  - type: input
+    id: slug
+    attributes:
+      label: Slug
+      description: "URL-friendly identifier (e.g., `type-inference-with-var`)"
+      placeholder: "my-pattern-name"
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: "Human-readable title"
+      placeholder: "Type inference with var"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      options:
+        - beginner
+        - intermediate
+        - advanced
+    validations:
+      required: true
+
+  - type: input
+    id: jdk-version
+    attributes:
+      label: Since JDK
+      description: "JDK version where this feature was introduced"
+      placeholder: "21"
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: "One-line description of the pattern"
+      placeholder: "Use var for local variable type inference — less noise, same safety."
+    validations:
+      required: true
+
+  - type: input
+    id: old-label
+    attributes:
+      label: Old code label
+      placeholder: "Java 8"
+    validations:
+      required: true
+
+  - type: textarea
+    id: old-code
+    attributes:
+      label: Old code
+      description: "The legacy way of doing it"
+      render: java
+    validations:
+      required: true
+
+  - type: input
+    id: modern-label
+    attributes:
+      label: Modern code label
+      placeholder: "Java 21+"
+    validations:
+      required: true
+
+  - type: textarea
+    id: modern-code
+    attributes:
+      label: Modern code
+      description: "The modern way of doing it"
+      render: java
+    validations:
+      required: true
+
+  - type: textarea
+    id: explanation
+    attributes:
+      label: Explanation
+      description: "How it works — one or two paragraphs"
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-modern-wins
+    attributes:
+      label: Why the modern way wins
+      description: |
+        Provide exactly 3 reasons. Use this format:
+        ```
+        ⚡ Less boilerplate — No need to repeat complex types.
+        👁 Better readability — Focus on values, not type declarations.
+        🔒 Still type-safe — Compiler infers and enforces the exact type.
+        ```
+    validations:
+      required: true
