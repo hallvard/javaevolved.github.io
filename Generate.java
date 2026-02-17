@@ -184,23 +184,19 @@ String escape(String text) {
     };
 }
 
-String jsonEscape(String text) {
-    try {
-        var quoted = MAPPER.writeValueAsString(text);
-        var inner = quoted.substring(1, quoted.length() - 1);
-        var sb = new StringBuilder(inner.length());
-        for (int i = 0; i < inner.length(); i++) {
-            char c = inner.charAt(i);
-            if (c > 127) {
-                sb.append("\\u%04x".formatted((int) c));
-            } else {
-                sb.append(c);
-            }
+String jsonEscape(String text) throws IOException {
+    var quoted = MAPPER.writeValueAsString(text);
+    var inner = quoted.substring(1, quoted.length() - 1);
+    var sb = new StringBuilder(inner.length());
+    for (int i = 0; i < inner.length(); i++) {
+        char c = inner.charAt(i);
+        if (c > 127) {
+            sb.append("\\u%04x".formatted((int) c));
+        } else {
+            sb.append(c);
         }
-        return sb.toString();
-    } catch (IOException _) {
-        throw new RuntimeException("Failed to JSON-escape: " + text);
     }
+    return sb.toString();
 }
 
 String urlEncode(String s) {
@@ -281,7 +277,7 @@ String renderSocialShare(String socialShareTemplate, String slug, String title) 
 // -- Main generation logic -----------------------------------------------
 
 String generateHtml(String template, String whyCardTemplate, String relatedCardTemplate,
-        String socialShareTemplate, Snippet snippet, Map<String, Snippet> allSnippets) {
+        String socialShareTemplate, Snippet snippet, Map<String, Snippet> allSnippets) throws IOException {
     var replacements = Map.ofEntries(
             Map.entry("title",              escape(snippet.title())),
             Map.entry("summary",            escape(snippet.summary())),
