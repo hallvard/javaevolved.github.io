@@ -119,6 +119,6 @@ Each `content/category/slug.json` file has this structure:
 ## Local Development
 
 ```bash
-java -jar html-generators/generate.jar              # Build HTML pages + snippets.json
-python3 -m http.server -d site 8090  # Serve locally
+java -jar html-generators/generate.jar  # Build HTML pages + snippets.json
+jwebserver -d site -p 8090              # Serve locally
 ```
