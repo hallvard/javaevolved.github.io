@@ -35,7 +35,7 @@
     "description": "Widely available since JDK 8 (March 2014)"
   },
   "prev": "collections/collectors-teeing",
-  "next": "collections/unmodifiable-collectors",
+  "next": "collections/reverse-list-iteration",
   "related": [
     "collections/collectors-teeing",
     "collections/map-entry-factory",

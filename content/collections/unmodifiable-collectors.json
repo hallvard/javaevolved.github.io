@@ -34,7 +34,7 @@
     "state": "available",
     "description": "Widely available since JDK 10 (March 2018)"
   },
-  "prev": "collections/stream-toarray-typed",
+  "prev": "collections/reverse-list-iteration",
   "next": "strings/string-isblank",
   "related": [
     "collections/immutable-map-creation",

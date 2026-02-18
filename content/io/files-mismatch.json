@@ -34,7 +34,7 @@
     "state": "available",
     "description": "Widely available since JDK 12 (March 2019)"
   },
-  "prev": "io/try-with-resources-effectively-final",
+  "prev": "io/file-memory-mapping",
   "next": "io/deserialization-filters",
   "related": [
     "io/inputstream-transferto",

@@ -9,7 +9,7 @@
   "modernLabel": "Java 11+",
   "oldApproach": "FileWriter + BufferedWriter",
   "modernApproach": "Files.writeString()",
-  "oldCode": "try (BufferedWriter bw =\n    new BufferedWriter(\n        new FileWriter(\"out.txt\"))) {\n    bw.write(content);\n}",
+  "oldCode": "try (FileWriter fw =\n        new FileWriter(\"out.txt\");\n    BufferedWriter bw =\n        new BufferedWriter(fw)) {\n    bw.write(content);\n}",
   "modernCode": "Files.writeString(\n    Path.of(\"out.txt\"),\n    content\n);",
   "summary": "Write a String to a file with one line.",
   "explanation": "Files.writeString() writes content to a file with UTF-8 encoding by default. Options can be passed for appending, creating, etc.",

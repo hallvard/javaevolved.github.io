@@ -35,7 +35,7 @@
     "description": "Widely available since JDK 9 (Sept 2017)"
   },
   "prev": "io/path-of",
-  "next": "io/files-mismatch",
+  "next": "io/file-memory-mapping",
   "related": [
     "io/path-of",
     "io/reading-files",
