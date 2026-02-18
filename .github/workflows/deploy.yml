@@ -7,6 +7,7 @@ on:
       - 'content/**/*.json'
       - 'templates/**'
       - 'html-generators/generate.jar'
+      - 'html-generators/generate.aot'
       - 'site/**'
   workflow_dispatch:
 
@@ -31,7 +32,7 @@ jobs:
           java-version: '25'
 
       - name: Generate HTML pages and snippets.json
-        run: java -jar html-generators/generate.jar
+        run: java -XX:AOTCache=html-generators/generate.aot -jar html-generators/generate.jar
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
