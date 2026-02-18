@@ -73,3 +73,7 @@ java -XX:AOTCache=html-generators/generate.aot -jar html-generators/generate.jar
 ./html-generators/benchmark/run.sh            # print results to stdout
 ./html-generators/benchmark/run.sh --update    # also update this file
 ```
+
+### CI Benchmark
+
+The [Benchmark Generator](https://github.com/javaevolved/javaevolved.github.io/actions/workflows/benchmark.yml) workflow runs cross-platform benchmarks (Ubuntu, Windows, macOS) on GitHub Actions. It includes a CI cold-start phase on a fresh runner to measure true first-run performance. Trigger it manually from the Actions tab.
