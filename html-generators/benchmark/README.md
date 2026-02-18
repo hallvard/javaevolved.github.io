@@ -1,30 +1,47 @@
 # Generator Benchmarks
 
-Performance comparison of the four ways to run the HTML generator, measured on 95 snippets across 10 categories.
+Performance comparison of execution methods for the HTML generator, measured on 95 snippets across 10 categories.
 
-## Results
+## Phase 1: Training / Build Cost (one-time)
 
-| Method | Cold Start | Warm Average | Notes |
-|--------|-----------|-------------|-------|
-| **Fat JAR + AOT** (`java -XX:AOTCache`) | 0.47s | **0.43s** | Fastest overall; requires one-time cache build |
-| **Fat JAR** (`java -jar`) | 0.43s | 0.55s | No setup needed |
-| **JBang** (`jbang generate.java`) | 0.93s | 0.98s | Includes JBang overhead |
-| **Python** (`python3 generate.py`) | 0.37s | 1.60s | Fast cold start; slowest warm |
+These are one-time setup costs, comparable across languages.
 
-- **Cold start**: First run after clearing caches / fresh process
-- **Warm average**: Mean of 5 subsequent runs
+| Step | Time | What it does |
+|------|------|-------------|
+| Python first run | 2.34s | Interprets source, creates `__pycache__` bytecode |
+| JBang export | 2.92s | Compiles source + bundles dependencies into fat JAR |
+| AOT training run | 3.14s | Runs JAR once to record class loading, produces `.aot` cache |
+
+## Phase 2: Steady-State Execution (avg of 5 runs)
+
+After one-time setup, these are the per-run execution times.
+
+| Method | Avg Time | Notes |
+|--------|---------|-------|
+| **Fat JAR + AOT** | **0.35s** | Fastest; pre-loaded classes from AOT cache |
+| **Fat JAR** | 0.50s | JVM class loading on every run |
+| **JBang** | 1.19s | Includes JBang launcher overhead |
+| **Python** | 1.37s | Uses cached `__pycache__` bytecode |
+
+## How It Works
+
+- **Python** caches compiled bytecode in `__pycache__/` after the first run, similar to how Java's AOT cache works.
+- **Java AOT** (JEP 483) snapshots ~3,300 pre-loaded classes from a training run into a `.aot` file, eliminating class loading overhead on subsequent runs.
+- **JBang** compiles and caches internally but adds launcher overhead on every invocation.
+- **Fat JAR** (`java -jar`) loads and links all classes from scratch each time.
 
 ## AOT Cache Setup
 
 ```bash
-# One-time: build the cache (~21 MB, platform-specific)
+# One-time: build the fat JAR
+jbang export fatjar --force --output html-generators/generate.jar html-generators/generate.java
+
+# One-time: build the AOT cache (~21 MB, platform-specific)
 java -XX:AOTCacheOutput=html-generators/generate.aot -jar html-generators/generate.jar
 
-# Use it
+# Steady-state: run with AOT cache
 java -XX:AOTCache=html-generators/generate.aot -jar html-generators/generate.jar
 ```
-
-The AOT cache uses Java 25 CDS (JEP 483) to pre-load classes from a training run. It is platform-specific (CPU arch + JDK version).
 
 ## Environment
 
@@ -36,10 +53,6 @@ The AOT cache uses Java 25 CDS (JEP 483) to pre-load classes from a training run
 | **JBang** | 0.136.0 |
 | **Python** | 3.14.3 |
 | **OS** | Darwin |
-
-## Methodology
-
-Each method was timed 6 times using `/usr/bin/time -p`. The first run is reported as "cold start" and the remaining 5 runs are averaged for "warm average". Between each run, `site/index.html` was reset via `git checkout` to ensure the generator runs fully each time.
 
 ## Reproduce
 

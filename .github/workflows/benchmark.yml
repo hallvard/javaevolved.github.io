@@ -28,18 +28,12 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Build fat JAR
-        run: jbang export fatjar --force --output html-generators/generate.jar html-generators/generate.java
-
-      - name: Build AOT cache
-        run: java -XX:AOTCacheOutput=html-generators/generate.aot -jar html-generators/generate.jar
-
       - name: Run benchmark
         shell: bash
         run: |
           JAR="html-generators/generate.jar"
           AOT="html-generators/generate.aot"
-          RUNS=6
+          STEADY_RUNS=5
 
           snippet_count=$(find content -name '*.json' | wc -l | tr -d ' ')
           java_ver=$(java -version 2>&1 | head -1 | sed 's/.*"\(.*\)".*/\1/')
@@ -53,40 +47,53 @@ jobs:
             echo "$t"
           }
 
-          bench() {
-            local label="$1"; shift
-            local times=()
-            for ((i = 1; i <= RUNS; i++)); do
-              t=$(measure "$@")
-              times+=("$t")
-            done
-            local cold="${times[0]}"
+          avg_runs() {
+            local n="$1"; shift
             local sum=0
-            for ((i = 1; i < RUNS; i++)); do
-              sum=$(awk "BEGIN {print $sum + ${times[$i]}}")
+            for ((i = 1; i <= n; i++)); do
+              local t
+              t=$(measure "$@")
+              sum=$(awk "BEGIN {print $sum + $t}")
             done
-            local warm
-            warm=$(awk "BEGIN {printf \"%.2f\", $sum / ($RUNS - 1)}")
-            echo "${label}|${cold}|${warm}"
+            awk "BEGIN {printf \"%.2f\", $sum / $n}"
           }
 
           echo "Running benchmark on $os_name (Java $java_ver, $snippet_count snippets)..."
 
-          aot_result=$(bench "Fat JAR + AOT" java -XX:AOTCache="$AOT" -jar "$JAR")
-          jar_result=$(bench "Fat JAR" java -jar "$JAR")
-          jbang_result=$(bench "JBang" jbang html-generators/generate.java)
-          python_result=$(bench "Python" python3 html-generators/generate.py)
+          # --- Phase 1: Training / build cost ---
+          rm -f "$JAR" "$AOT"
+          find html-generators -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
+
+          PY_TRAIN=$(measure python3 html-generators/generate.py)
+          JBANG_EXPORT=$(measure jbang export fatjar --force --output "$JAR" html-generators/generate.java)
+          AOT_TRAIN=$(measure java -XX:AOTCacheOutput="$AOT" -jar "$JAR")
+
+          # --- Phase 2: Steady-state execution ---
+          PY_STEADY=$(avg_runs $STEADY_RUNS python3 html-generators/generate.py)
+          JBANG_STEADY=$(avg_runs $STEADY_RUNS jbang html-generators/generate.java)
+          JAR_STEADY=$(avg_runs $STEADY_RUNS java -jar "$JAR")
+          AOT_STEADY=$(avg_runs $STEADY_RUNS java -XX:AOTCache="$AOT" -jar "$JAR")
 
           # Write to GitHub Actions Job Summary
           {
             echo "## Benchmark Results — \`$os_name\`"
             echo ""
-            echo "Java $java_ver · $snippet_count snippets · $RUNS runs (1 cold + $((RUNS - 1)) warm)"
+            echo "Java $java_ver · $snippet_count snippets"
             echo ""
-            echo "| Method | Cold Start | Warm Average |"
-            echo "|--------|-----------|-------------|"
-            for result in "$aot_result" "$jar_result" "$jbang_result" "$python_result"; do
-              IFS='|' read -r label cold warm <<< "$result"
-              echo "| **$label** | ${cold}s | ${warm}s |"
-            done
+            echo "### Phase 1: Training / Build Cost (one-time)"
+            echo ""
+            echo "| Step | Time | What it does |"
+            echo "|------|------|-------------|"
+            echo "| Python first run | ${PY_TRAIN}s | Interprets source, creates \`__pycache__\` bytecode |"
+            echo "| JBang export | ${JBANG_EXPORT}s | Compiles source + bundles dependencies into fat JAR |"
+            echo "| AOT training run | ${AOT_TRAIN}s | Runs JAR once to record class loading, produces \`.aot\` cache |"
+            echo ""
+            echo "### Phase 2: Steady-State Execution (avg of $STEADY_RUNS runs)"
+            echo ""
+            echo "| Method | Avg Time |"
+            echo "|--------|---------|"
+            echo "| **Fat JAR + AOT** | **${AOT_STEADY}s** |"
+            echo "| **Fat JAR** | ${JAR_STEADY}s |"
+            echo "| **JBang** | ${JBANG_STEADY}s |"
+            echo "| **Python** | ${PY_STEADY}s |"
           } >> "$GITHUB_STEP_SUMMARY"

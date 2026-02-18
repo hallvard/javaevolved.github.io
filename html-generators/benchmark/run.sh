@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
-# Benchmark the four ways to run the HTML generator.
+# Benchmark the HTML generator across languages and execution methods.
 #
-# Setup: rebuilds the AOT cache before benchmarking.
-# Runs:  6 iterations per method (1 cold + 5 warm).
-# Output: table printed to stdout; optionally updates README.md.
+# Phase 1: Training/build cost (one-time setup)
+#   - Python first run (creates __pycache__)
+#   - Java AOT training run (creates .aot)
+#   - JBang export (creates fat JAR)
+#
+# Phase 2: Steady-state execution (5 runs averaged)
+#   - Python (warm, with __pycache__)
+#   - JBang (from source)
+#   - Fat JAR (java -jar)
+#   - Fat JAR + AOT (java -XX:AOTCache)
 #
 # Usage:
-#   ./html-generators/benchmark/run.sh            # run all methods
+#   ./html-generators/benchmark/run.sh            # print results to stdout
 #   ./html-generators/benchmark/run.sh --update    # also update README.md
 
 set -euo pipefail
@@ -14,34 +21,36 @@ cd "$(git rev-parse --show-toplevel)"
 
 JAR="html-generators/generate.jar"
 AOT="html-generators/generate.aot"
-RUNS=6
+STEADY_RUNS=5
 UPDATE_MD=false
 [[ "${1:-}" == "--update" ]] && UPDATE_MD=true
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+time_once() {
+  /usr/bin/time -p "$@" > /dev/null 2>&1 | awk '/^real/ {print $2}'
+  # fallback: capture from stderr
+  local t
+  t=$( { /usr/bin/time -p "$@" > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
+  echo "$t"
+}
 
-# Run a command $RUNS times, collect real times into $TIMES array
-bench() {
-  local label="$1"; shift
-  TIMES=()
-  for ((i = 1; i <= RUNS; i++)); do
-    local t
-    t=$( { /usr/bin/time -p "$@" > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
-    TIMES+=("$t")
-  done
-  local cold="${TIMES[0]}"
+measure() {
+  local t
+  t=$( { /usr/bin/time -p "$@" > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
+  echo "$t"
+}
+
+avg_runs() {
+  local n="$1"; shift
   local sum=0
-  for ((i = 1; i < RUNS; i++)); do
-    sum=$(echo "$sum + ${TIMES[$i]}" | bc)
+  for ((i = 1; i <= n; i++)); do
+    local t
+    t=$(measure "$@")
+    sum=$(echo "$sum + $t" | bc)
   done
-  local warm
-  warm=$(echo "scale=2; $sum / ($RUNS - 1)" | bc | sed 's/^\./0./')
-  printf "| %-42s | %5ss | **%5ss** |\n" "$label" "$cold" "$warm"
-  # export for README.md update
-  eval "${2//[^a-zA-Z]/_}_COLD=$cold"
-  eval "${2//[^a-zA-Z]/_}_WARM=$warm"
+  echo "scale=2; $sum / $n" | bc | sed 's/^\./0./'
 }
 
 # ---------------------------------------------------------------------------
@@ -61,69 +70,46 @@ echo "Snippets:    $SNIPPET_COUNT across 10 categories"
 echo ""
 
 # ---------------------------------------------------------------------------
-# Setup: rebuild AOT cache
+# Phase 1: Training / build cost (one-time)
 # ---------------------------------------------------------------------------
-echo "=== Setup: building AOT cache ==="
-java -XX:AOTCacheOutput="$AOT" -jar "$JAR" > /dev/null 2>&1
-echo "Cache: $AOT ($(du -h "$AOT" | cut -f1 | tr -d ' '))"
+echo "=== Phase 1: Training / Build Cost (one-time) ==="
+echo ""
+
+# Clean up any cached state
+rm -f html-generators/generate.aot html-generators/generate.jar
+find html-generators -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
+
+# Python first run (populates __pycache__)
+PY_TRAIN=$(measure python3 html-generators/generate.py)
+echo "  Python first run (creates __pycache__):   ${PY_TRAIN}s"
+
+# JBang export (creates fat JAR)
+JBANG_EXPORT=$(measure jbang export fatjar --force --output "$JAR" html-generators/generate.java)
+echo "  JBang export (creates fat JAR):            ${JBANG_EXPORT}s"
+
+# AOT training run (creates .aot from JAR)
+AOT_TRAIN=$(measure java -XX:AOTCacheOutput="$AOT" -jar "$JAR")
+echo "  AOT training run (creates .aot):           ${AOT_TRAIN}s"
+
 echo ""
 
 # ---------------------------------------------------------------------------
-# Benchmark
+# Phase 2: Steady-state execution (averaged over $STEADY_RUNS runs)
 # ---------------------------------------------------------------------------
-echo "=== Benchmark ($RUNS runs each: 1 cold + $((RUNS - 1)) warm) ==="
+echo "=== Phase 2: Steady-State Execution (avg of $STEADY_RUNS runs) ==="
 echo ""
-printf "| %-42s | %6s | %10s |\n" "Method" "Cold" "Warm Avg"
-printf "|%-44s|%7s|%12s|\n" "--------------------------------------------" "--------" "------------"
 
-AOT_COLD="" ; AOT_WARM=""
-JAR_COLD="" ; JAR_WARM=""
-JBANG_COLD="" ; JBANG_WARM=""
-PY_COLD="" ; PY_WARM=""
+PY_STEADY=$(avg_runs $STEADY_RUNS python3 html-generators/generate.py)
+echo "  Python (warm):           ${PY_STEADY}s"
 
-# Fat JAR + AOT
-TIMES=()
-for ((i = 1; i <= RUNS; i++)); do
-  t=$( { /usr/bin/time -p java -XX:AOTCache="$AOT" -jar "$JAR" > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
-  TIMES+=("$t")
-done
-AOT_COLD="${TIMES[0]}"
-sum=0; for ((i = 1; i < RUNS; i++)); do sum=$(echo "$sum + ${TIMES[$i]}" | bc); done
-AOT_WARM=$(echo "scale=2; $sum / ($RUNS - 1)" | bc | sed 's/^\./0./')
-printf "| %-42s | %5ss | **%5ss** |\n" "**Fat JAR + AOT** (\`java -XX:AOTCache\`)" "$AOT_COLD" "$AOT_WARM"
+JBANG_STEADY=$(avg_runs $STEADY_RUNS jbang html-generators/generate.java)
+echo "  JBang (from source):     ${JBANG_STEADY}s"
 
-# Fat JAR
-TIMES=()
-for ((i = 1; i <= RUNS; i++)); do
-  t=$( { /usr/bin/time -p java -jar "$JAR" > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
-  TIMES+=("$t")
-done
-JAR_COLD="${TIMES[0]}"
-sum=0; for ((i = 1; i < RUNS; i++)); do sum=$(echo "$sum + ${TIMES[$i]}" | bc); done
-JAR_WARM=$(echo "scale=2; $sum / ($RUNS - 1)" | bc | sed 's/^\./0./')
-printf "| %-42s | %5ss | **%5ss** |\n" "**Fat JAR** (\`java -jar\`)" "$JAR_COLD" "$JAR_WARM"
+JAR_STEADY=$(avg_runs $STEADY_RUNS java -jar "$JAR")
+echo "  Fat JAR:                 ${JAR_STEADY}s"
 
-# JBang
-TIMES=()
-for ((i = 1; i <= RUNS; i++)); do
-  t=$( { /usr/bin/time -p jbang html-generators/generate.java > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
-  TIMES+=("$t")
-done
-JBANG_COLD="${TIMES[0]}"
-sum=0; for ((i = 1; i < RUNS; i++)); do sum=$(echo "$sum + ${TIMES[$i]}" | bc); done
-JBANG_WARM=$(echo "scale=2; $sum / ($RUNS - 1)" | bc | sed 's/^\./0./')
-printf "| %-42s | %5ss | **%5ss** |\n" "**JBang** (\`jbang generate.java\`)" "$JBANG_COLD" "$JBANG_WARM"
-
-# Python
-TIMES=()
-for ((i = 1; i <= RUNS; i++)); do
-  t=$( { /usr/bin/time -p python3 html-generators/generate.py > /dev/null; } 2>&1 | awk '/^real/ {print $2}' )
-  TIMES+=("$t")
-done
-PY_COLD="${TIMES[0]}"
-sum=0; for ((i = 1; i < RUNS; i++)); do sum=$(echo "$sum + ${TIMES[$i]}" | bc); done
-PY_WARM=$(echo "scale=2; $sum / ($RUNS - 1)" | bc | sed 's/^\./0./')
-printf "| %-42s | %5ss | **%5ss** |\n" "**Python** (\`python3 generate.py\`)" "$PY_COLD" "$PY_WARM"
+AOT_STEADY=$(avg_runs $STEADY_RUNS java -XX:AOTCache="$AOT" -jar "$JAR")
+echo "  Fat JAR + AOT:           ${AOT_STEADY}s"
 
 echo ""
 
@@ -135,31 +121,48 @@ if $UPDATE_MD; then
   cat > "$MD" <<EOF
 # Generator Benchmarks
 
-Performance comparison of the four ways to run the HTML generator, measured on $SNIPPET_COUNT snippets across 10 categories.
+Performance comparison of execution methods for the HTML generator, measured on $SNIPPET_COUNT snippets across 10 categories.
 
-## Results
+## Phase 1: Training / Build Cost (one-time)
 
-| Method | Cold Start | Warm Average | Notes |
-|--------|-----------|-------------|-------|
-| **Fat JAR + AOT** (\`java -XX:AOTCache\`) | ${AOT_COLD}s | **${AOT_WARM}s** | Fastest overall; requires one-time cache build |
-| **Fat JAR** (\`java -jar\`) | ${JAR_COLD}s | ${JAR_WARM}s | No setup needed |
-| **JBang** (\`jbang generate.java\`) | ${JBANG_COLD}s | ${JBANG_WARM}s | Includes JBang overhead |
-| **Python** (\`python3 generate.py\`) | ${PY_COLD}s | ${PY_WARM}s | Fast cold start; slowest warm |
+These are one-time setup costs, comparable across languages.
 
-- **Cold start**: First run after clearing caches / fresh process
-- **Warm average**: Mean of $((RUNS - 1)) subsequent runs
+| Step | Time | What it does |
+|------|------|-------------|
+| Python first run | ${PY_TRAIN}s | Interprets source, creates \`__pycache__\` bytecode |
+| JBang export | ${JBANG_EXPORT}s | Compiles source + bundles dependencies into fat JAR |
+| AOT training run | ${AOT_TRAIN}s | Runs JAR once to record class loading, produces \`.aot\` cache |
+
+## Phase 2: Steady-State Execution (avg of $STEADY_RUNS runs)
+
+After one-time setup, these are the per-run execution times.
+
+| Method | Avg Time | Notes |
+|--------|---------|-------|
+| **Fat JAR + AOT** | **${AOT_STEADY}s** | Fastest; pre-loaded classes from AOT cache |
+| **Fat JAR** | ${JAR_STEADY}s | JVM class loading on every run |
+| **JBang** | ${JBANG_STEADY}s | Includes JBang launcher overhead |
+| **Python** | ${PY_STEADY}s | Uses cached \`__pycache__\` bytecode |
+
+## How It Works
+
+- **Python** caches compiled bytecode in \`__pycache__/\` after the first run, similar to how Java's AOT cache works.
+- **Java AOT** (JEP 483) snapshots ~3,300 pre-loaded classes from a training run into a \`.aot\` file, eliminating class loading overhead on subsequent runs.
+- **JBang** compiles and caches internally but adds launcher overhead on every invocation.
+- **Fat JAR** (\`java -jar\`) loads and links all classes from scratch each time.
 
 ## AOT Cache Setup
 
 \`\`\`bash
-# One-time: build the cache (~21 MB, platform-specific)
+# One-time: build the fat JAR
+jbang export fatjar --force --output html-generators/generate.jar html-generators/generate.java
+
+# One-time: build the AOT cache (~21 MB, platform-specific)
 java -XX:AOTCacheOutput=html-generators/generate.aot -jar html-generators/generate.jar
 
-# Use it
+# Steady-state: run with AOT cache
 java -XX:AOTCache=html-generators/generate.aot -jar html-generators/generate.jar
 \`\`\`
-
-The AOT cache uses Java 25 CDS (JEP 483) to pre-load classes from a training run. It is platform-specific (CPU arch + JDK version).
 
 ## Environment
 
@@ -171,10 +174,6 @@ The AOT cache uses Java 25 CDS (JEP 483) to pre-load classes from a training run
 | **JBang** | $JBANG_VER |
 | **Python** | $PYTHON_VER |
 | **OS** | $OS |
-
-## Methodology
-
-Each method was timed $RUNS times using \`/usr/bin/time -p\`. The first run is reported as "cold start" and the remaining $((RUNS - 1)) runs are averaged for "warm average". Between each run, \`site/index.html\` was reset via \`git checkout\` to ensure the generator runs fully each time.
 
 ## Reproduce
 
