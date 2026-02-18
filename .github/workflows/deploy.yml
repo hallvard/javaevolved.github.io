@@ -6,9 +6,11 @@ on:
     paths:
       - 'content/**/*.json'
       - 'templates/**'
-      - 'html-generators/generate.jar'
-      - 'html-generators/generate.aot'
       - 'site/**'
+  workflow_run:
+    workflows: ['Build Generator JAR']
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,6 +25,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -30,6 +33,22 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '25'
+
+      - name: Restore cached JAR and AOT
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            html-generators/generate.jar
+            html-generators/generate.aot
+          key: generator-${{ hashFiles('html-generators/generate.java') }}
+
+      - name: Build JAR if cache miss
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache miss — building JAR from source"
+          curl -Ls https://sh.jbang.dev | bash -s - export fatjar --force --output html-generators/generate.jar html-generators/generate.java
+          java -XX:AOTCacheOutput=html-generators/generate.aot -jar html-generators/generate.jar
 
       - name: Generate HTML pages and snippets.json
         run: java -XX:AOTCache=html-generators/generate.aot -jar html-generators/generate.jar
