@@ -19,19 +19,25 @@ INDEX_CARD_TEMPLATE = "templates/index-card.html"
 CONTENT_DIR = "content"
 SITE_DIR = "site"
 
-CATEGORY_DISPLAY = {
-    "language": "Language",
-    "collections": "Collections",
-    "strings": "Strings",
-    "streams": "Streams",
-    "concurrency": "Concurrency",
-    "io": "I/O",
-    "errors": "Errors",
-    "datetime": "Date/Time",
-    "security": "Security",
-    "tooling": "Tooling",
-    "enterprise": "Enterprise",
-}
+CATEGORIES_FILE = "html-generators/categories.properties"
+
+
+def load_category_display():
+    """Load category display names from the properties file."""
+    categories = {}
+    with open(CATEGORIES_FILE) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            key, sep, value = line.partition('=')
+            key, value = key.strip(), value.strip()
+            if sep and key:
+                categories[key] = value
+    return categories
+
+
+CATEGORY_DISPLAY = load_category_display()
 
 
 def escape(text):
@@ -65,12 +71,8 @@ def load_template():
 def load_all_snippets():
     """Load all JSON snippet files, keyed by category/slug."""
     snippets = {}
-    categories = [
-        "language", "collections", "strings", "streams", "concurrency",
-        "io", "errors", "datetime", "security", "tooling", "enterprise",
-    ]
     json_files = []
-    for cat in categories:
+    for cat in CATEGORY_DISPLAY:
         json_files.extend(sorted(glob.glob(f"{CONTENT_DIR}/{cat}/*.json")))
     for path in json_files:
         with open(path) as f:

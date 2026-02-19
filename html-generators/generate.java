@@ -16,14 +16,23 @@ static final String SITE_DIR = "site";
 static final Pattern TOKEN = Pattern.compile("\\{\\{(\\w+)}}");
 static final ObjectMapper MAPPER = new ObjectMapper();
 
-static final SequencedMap<String, String> CATEGORY_DISPLAY = new LinkedHashMap<>() {{
-    put("language", "Language"); put("collections", "Collections");
-    put("strings", "Strings");   put("streams", "Streams");
-    put("concurrency", "Concurrency"); put("io", "I/O");
-    put("errors", "Errors");     put("datetime", "Date/Time");
-    put("security", "Security"); put("tooling", "Tooling");
-    put("enterprise", "Enterprise");
-}};
+static final String CATEGORIES_FILE = "html-generators/categories.properties";
+static final SequencedMap<String, String> CATEGORY_DISPLAY = loadCategoryDisplay();
+
+static SequencedMap<String, String> loadCategoryDisplay() {
+    try {
+        var map = new LinkedHashMap<String, String>();
+        for (var line : Files.readAllLines(Path.of(CATEGORIES_FILE))) {
+            line = line.strip();
+            if (line.isEmpty() || line.startsWith("#")) continue;
+            var idx = line.indexOf('=');
+            if (idx > 0) map.put(line.substring(0, idx).strip(), line.substring(idx + 1).strip());
+        }
+        return map;
+    } catch (IOException e) {
+        throw new UncheckedIOException(e);
+    }
+}
 
 static final Set<String> EXCLUDED_KEYS = Set.of("_path", "prev", "next", "related");
 
