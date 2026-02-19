@@ -180,6 +180,14 @@
           }
         });
 
+        // Update URL hash to reflect active filter
+        const activeFilter = pill.classList.contains('active') ? category : null;
+        if (activeFilter && activeFilter !== 'all') {
+          history.replaceState(null, '', '#' + activeFilter);
+        } else {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+
         // Update view toggle button state
         if (window.updateViewToggleState) {
           window.updateViewToggleState();
@@ -187,11 +195,26 @@
       });
     });
 
-    // Auto-click "All" button on page load to show all cards
-    const allButton = document.querySelector('.filter-pill[data-filter="all"]');
-    if (allButton) {
-      allButton.click();
-    }
+    // Apply filter from a given category string (or "all" / empty for no filter)
+    const applyHashFilter = (category) => {
+      const target = category
+        ? document.querySelector(`.filter-pill[data-filter="${category}"]`)
+        : null;
+      if (target) {
+        target.click();
+      } else {
+        const allButton = document.querySelector('.filter-pill[data-filter="all"]');
+        if (allButton) allButton.click();
+      }
+    };
+
+    // On load, apply filter from URL hash or default to "All"
+    applyHashFilter(window.location.hash.slice(1));
+
+    // Also react to browser back/forward hash changes
+    window.addEventListener('hashchange', () => {
+      applyHashFilter(window.location.hash.slice(1));
+    });
   };
 
   /* ==========================================================
