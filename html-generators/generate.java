@@ -22,6 +22,7 @@ static final SequencedMap<String, String> CATEGORY_DISPLAY = new LinkedHashMap<>
     put("concurrency", "Concurrency"); put("io", "I/O");
     put("errors", "Errors");     put("datetime", "Date/Time");
     put("security", "Security"); put("tooling", "Tooling");
+    put("enterprise", "Enterprise");
 }};
 
 static final Set<String> EXCLUDED_KEYS = Set.of("_path", "prev", "next", "related");
