@@ -35,7 +35,7 @@
     "description": "Widely available since JDK 16 (March 2021)"
   },
   "prev": "language/static-members-in-inner-classes",
-  "next": null,
+  "next": "enterprise/servlet-vs-jaxrs",
   "related": [
     "language/records-for-data-classes",
     "language/flexible-constructor-bodies",

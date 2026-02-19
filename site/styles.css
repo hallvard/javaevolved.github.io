@@ -527,6 +527,7 @@ nav {
 .badge.datetime   { color: var(--accent);  background: rgba(251, 146, 60, .1);  border-color: rgba(251, 146, 60, .2); }
 .badge.security   { color: var(--pink);    background: rgba(244, 114, 182, .1); border-color: rgba(244, 114, 182, .2); }
 .badge.tooling    { color: var(--blue);    background: rgba(96, 165, 250, .1);  border-color: rgba(96, 165, 250, .2); }
+.badge.enterprise { color: var(--cyan);    background: rgba(34, 211, 238, .1);  border-color: rgba(34, 211, 238, .2); }
 
 .badge.beginner     { color: var(--green);  background: rgba(52, 211, 153, .1);  border-color: rgba(52, 211, 153, .2); }
 .badge.intermediate { color: var(--yellow); background: rgba(251, 191, 36, .1);  border-color: rgba(251, 191, 36, .2); }

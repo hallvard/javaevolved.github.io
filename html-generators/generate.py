@@ -30,6 +30,7 @@ CATEGORY_DISPLAY = {
     "datetime": "Date/Time",
     "security": "Security",
     "tooling": "Tooling",
+    "enterprise": "Enterprise",
 }
 
 
@@ -66,7 +67,7 @@ def load_all_snippets():
     snippets = {}
     categories = [
         "language", "collections", "strings", "streams", "concurrency",
-        "io", "errors", "datetime", "security", "tooling",
+        "io", "errors", "datetime", "security", "tooling", "enterprise",
     ]
     json_files = []
     for cat in categories:
