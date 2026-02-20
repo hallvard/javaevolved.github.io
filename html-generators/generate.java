@@ -135,16 +135,20 @@ SequencedMap<String, Snippet> loadAllSnippets() throws IOException {
     for (var cat : CATEGORY_DISPLAY.sequencedKeySet()) {
         var catDir = Path.of(CONTENT_DIR, cat);
         if (!Files.isDirectory(catDir)) continue;
+        var sorted = new ArrayList<Path>();
+        // first collect and sortall files
         for (var ext : MAPPERS.keySet()) {
           try (var stream = Files.newDirectoryStream(catDir, "*." + ext)) {
-              var sorted = new ArrayList<Path>();
               stream.forEach(sorted::add);
-              sorted.sort(Path::compareTo);
-              for (var path : sorted) {
-                  var snippet = new Snippet(MAPPERS.get(ext).readTree(path.toFile()));
-                  snippets.put(snippet.key(), snippet);
-              }
           }
+        }
+        sorted.sort(Path::compareTo);
+        for (var path : sorted) {
+            var filename = path.getFileName().toString();
+            var ext = filename.substring(filename.lastIndexOf('.') + 1);
+            var json = MAPPERS.get(ext).readTree(path.toFile());
+            var snippet = new Snippet(json);
+            snippets.put(snippet.key(), snippet);
         }
     }
     return snippets;
