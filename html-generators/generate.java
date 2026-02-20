@@ -1,10 +1,12 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
 //JAVA 25
 //DEPS com.fasterxml.jackson.core:jackson-databind:2.18.3
+//DEPS com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.3
 
 import module java.base;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
  * Generate HTML detail pages from JSON snippet files and slug-template.html.
@@ -14,7 +16,13 @@ static final String BASE_URL = "https://javaevolved.github.io";
 static final String CONTENT_DIR = "content";
 static final String SITE_DIR = "site";
 static final Pattern TOKEN = Pattern.compile("\\{\\{(\\w+)}}");
-static final ObjectMapper MAPPER = new ObjectMapper();
+static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+static final ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
+static final Map<String, ObjectMapper> MAPPERS = Map.of(
+    "json", JSON_MAPPER,
+    "yaml", YAML_MAPPER,
+    "yml", YAML_MAPPER
+);
 
 static final String CATEGORIES_FILE = "html-generators/categories.properties";
 static final SequencedMap<String, String> CATEGORY_DISPLAY = loadCategoryDisplay();
@@ -100,7 +108,7 @@ void main() throws IOException {
     // Rebuild data/snippets.json
     var snippetsList = allSnippets.values().stream()
             .map(s -> {
-                Map<String, Object> map = MAPPER.convertValue(s.node(), new TypeReference<LinkedHashMap<String, Object>>() {});
+                Map<String, Object> map = JSON_MAPPER.convertValue(s.node(), new TypeReference<LinkedHashMap<String, Object>>() {});
                 EXCLUDED_KEYS.forEach(map::remove);
                 return map;
             })
@@ -127,14 +135,16 @@ SequencedMap<String, Snippet> loadAllSnippets() throws IOException {
     for (var cat : CATEGORY_DISPLAY.sequencedKeySet()) {
         var catDir = Path.of(CONTENT_DIR, cat);
         if (!Files.isDirectory(catDir)) continue;
-        try (var stream = Files.newDirectoryStream(catDir, "*.json")) {
-            var sorted = new ArrayList<Path>();
-            stream.forEach(sorted::add);
-            sorted.sort(Path::compareTo);
-            for (var path : sorted) {
-                var snippet = new Snippet(MAPPER.readTree(path.toFile()));
-                snippets.put(snippet.key(), snippet);
-            }
+        for (var ext : MAPPERS.keySet()) {
+          try (var stream = Files.newDirectoryStream(catDir, "*." + ext)) {
+              var sorted = new ArrayList<Path>();
+              stream.forEach(sorted::add);
+              sorted.sort(Path::compareTo);
+              for (var path : sorted) {
+                  var snippet = new Snippet(MAPPERS.get(ext).readTree(path.toFile()));
+                  snippets.put(snippet.key(), snippet);
+              }
+          }
         }
     }
     return snippets;
@@ -145,7 +155,7 @@ String escape(String text) {
 }
 
 String jsonEscape(String text) throws IOException {
-    var quoted = MAPPER.writeValueAsString(text);
+    var quoted = JSON_MAPPER.writeValueAsString(text);
     var inner = quoted.substring(1, quoted.length() - 1);
     var sb = new StringBuilder(inner.length());
     for (int i = 0; i < inner.length(); i++) {
