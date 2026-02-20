@@ -1,0 +1,50 @@
+{
+  "id": 0,
+  "slug": "your-slug-here",
+  "title": "Your Pattern Title",
+  "category": "language",
+  "difficulty": "beginner",
+  "jdkVersion": "17",
+  "oldLabel": "Java 8",
+  "modernLabel": "Java 17+",
+  "oldApproach": "Old Approach Name",
+  "modernApproach": "Modern Approach Name",
+  "oldCode": "// Old way...",
+  "modernCode": "// Modern way...",
+  "summary": "One-line description of the pattern.",
+  "explanation": "A paragraph explaining how the modern approach works and when to use it.",
+  "whyModernWins": [
+    {
+      "icon": "⚡",
+      "title": "Short benefit title",
+      "desc": "One sentence describing this benefit."
+    },
+    {
+      "icon": "👁",
+      "title": "Short benefit title",
+      "desc": "One sentence describing this benefit."
+    },
+    {
+      "icon": "🔒",
+      "title": "Short benefit title",
+      "desc": "One sentence describing this benefit."
+    }
+  ],
+  "support": {
+    "state": "available",
+    "description": "Widely available since JDK 17 (September 2021)"
+  },
+  "prev": "category/previous-slug",
+  "next": "category/next-slug",
+  "related": [
+    "category/related-slug-1",
+    "category/related-slug-2",
+    "category/related-slug-3"
+  ],
+  "docs": [
+    {
+      "title": "Javadoc or Guide Title",
+      "href": "https://docs.oracle.com/..."
+    }
+  ]
+}

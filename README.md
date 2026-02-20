@@ -6,6 +6,13 @@ A collection of side-by-side code comparisons showing old Java patterns next to 
 
 🔗 **[javaevolved.github.io](https://javaevolved.github.io)**
 
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-live-brightgreen)](https://javaevolved.github.io)
+[![Snippets](https://img.shields.io/badge/snippets-107-blue)](#categories)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange)](#contributing)
+
+> **Note:** Update the snippet count badge above when adding new patterns.
+
 ---
 
 ## What is this?
@@ -31,12 +38,13 @@ Each comparison includes an explanation of *why* the modern approach is better, 
 | **Date/Time** | `java.time` basics, `Duration`/`Period`, `DateTimeFormatter`, instant precision |
 | **Security** | TLS defaults, `SecureRandom`, PEM encoding, key derivation functions |
 | **Tooling** | JShell, single-file execution, JFR profiling, compact source files, AOT |
+| **Enterprise** | EJB → CDI, JDBC → JPA/Jakarta Data, JNDI → injection, MDB → reactive messaging, REST |
 
 ## Architecture
 
 This site uses a **JSON-first** build pipeline:
 
-- **Source of truth**: Individual `content/category/slug.json` files (85 across 10 category folders)
+- **Source of truth**: Individual `content/category/slug.json` files (107 across 11 category folders)
 - **Templates**: `templates/` — shared HTML templates with `{{placeholder}}` tokens
 - **Generator**: `html-generators/generate.jar` — pre-built fat JAR that produces all HTML detail pages and `data/snippets.json`
 - **Deploy**: GitHub Actions runs the generator and deploys to GitHub Pages
@@ -69,10 +77,10 @@ For development on the generator itself, you can use JBang or Python — see [ht
 Contributions are welcome! Content is managed as JSON files — never edit generated HTML.
 
 1. Fork the repo
-2. Create or edit a JSON file in the appropriate content folder (e.g. `content/language/my-feature.json`)
-3. Follow the [snippet JSON schema](.github/copilot-instructions.md) for all required fields
-4. Run `java -jar html-generators/generate.jar` to verify your changes build correctly
-5. Update `site/index.html` with a new preview card if adding a new snippet
+2. Create a new JSON file in the appropriate `content/<category>/` folder (e.g. `content/language/my-feature.json`)
+3. Copy [`content/template.json`](content/template.json) to the new file as a starting point for all required fields (see the [snippet JSON schema](.github/copilot-instructions.md) for details)
+4. Update the `prev`/`next` fields in adjacent pattern JSON files to maintain navigation
+5. Run `jbang html-generators/generate.java` to verify your changes build correctly
 6. Open a pull request
 
 Please ensure JDK version labels only reference the version where a feature became **final** (non-preview).
